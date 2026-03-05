@@ -203,6 +203,212 @@ function drawStandingChalkboard(
   px(ctx, x + 4, y + 13, 8, 0.5, "rgba(255,255,255,0.2)")
 }
 
+function drawBookstand(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Ornate Wooden Base
+  px(ctx, x + 2, y + 12, 12, 4, "#5a3520") // bottom base
+  px(ctx, x + 4, y + 4, 8, 8, "#6b4226") // central pillar
+  px(ctx, x + 1, y + 2, 14, 2, "#8b5e3c") // slanted top plate
+  
+  // Shading/Detail
+  px(ctx, x + 5, y + 5, 1, 6, "rgba(0,0,0,0.2)") // pillar shadow
+
+  // The Open Book
+  px(ctx, x + 2, y, 6, 4, "#ffffff") // Left page
+  px(ctx, x + 8, y, 6, 4, "#f5f5f5") // Right page
+  px(ctx, x + 7, y, 1, 4, "#d4c0a0") // Book spine/binding
+  
+  // Animated "Text" lines in book
+  px(ctx, x + 3, y + 1, 4, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 3, y + 2.5, 3, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 9, y + 1, 4, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 9, y + 2.5, 4, 0.5, "rgba(0,0,0,0.1)")
+  
+  // Decorative Bookmark
+  px(ctx, x + 11, y - 1, 1, 3, "#d32f2f") 
+}
+
+function drawGrandBookshelf(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  const shelfW = 24
+  const shelfH = 30
+  
+  // Ornate Warm Wood Frame
+  px(ctx, x, y, shelfW, shelfH, "#3a1a05") // Outer frame
+  px(ctx, x + 1, y + 1, shelfW - 2, shelfH - 2, "#4a2815") // Interior
+  
+  // Shelves
+  for (let i = 1; i < 3; i++) {
+    px(ctx, x + 1, y + i * 10, shelfW - 2, 1, "#2a1005")
+  }
+
+  // Warm Colored Books - Static pattern to avoid flickering
+  const warmColors = [
+    "#8b0000", // Deep Red
+    "#b22222", // Firebrick
+    "#a0522d", // Sienna
+    "#d2691e", // Chocolate
+    "#cd853f", // Peru
+    "#deb887", // BurlyWood
+    "#f5deb3", // Wheat
+  ]
+  
+  const shelfPatterns = [
+    [3, 2, 4, 2, 3, 2], // shelf 1 book widths
+    [2, 3, 2, 4, 2, 3], // shelf 2 book widths
+    [4, 2, 3, 2, 4, 1], // shelf 3 book widths
+  ]
+  
+  for (let shelf = 0; shelf < 3; shelf++) {
+    const sy = y + 1 + shelf * 10
+    let curX = x + 2
+    const pattern = shelfPatterns[shelf]
+    
+    pattern.forEach((bW, i) => {
+      const bH = 6 + (i % 3) // Varied but static height
+      const color = warmColors[(shelf * 3 + i) % warmColors.length]
+      
+      // Draw book spine
+      px(ctx, curX, sy + (9 - bH), bW, bH, color)
+      // Spine detail
+      px(ctx, curX, sy + (9 - bH) + 1, bW, 0.5, "rgba(255,255,255,0.1)")
+      
+      curX += bW + 1
+    })
+  }
+
+  // Decorative topper
+  px(ctx, x - 1, y - 1, shelfW + 2, 2, "#3a1a05")
+}
+
+function drawRusticStool(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Rustic tripod-style stool
+  const legColor = "#3a1a05"
+  const seatColor = "#5a3520"
+  
+  // Legs
+  px(ctx, x + 1, y + 4, 1, 6, legColor) // back
+  px(ctx, x - 1, y + 5, 1, 6, legColor) // front left
+  px(ctx, x + 3, y + 5, 1, 6, legColor) // front right
+  px(ctx, x, y + 8, 3, 1, legColor) // crossbar
+  
+  // Thick wooden seat
+  px(ctx, x - 2, y + 2, 7, 2, seatColor)
+  px(ctx, x - 1, y + 1, 5, 1, "#6b4226") // top highlight
+}
+
+function drawVintageRadio(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Detailed 1950s style Table Radio
+  const bodyColor = "#8b4513"
+  const dialColor = "#ffe066"
+  const meshColor = "#d4c0a0"
+  
+  // Wood Body
+  px(ctx, x, y, 10, 7, bodyColor)
+  px(ctx, x + 1, y + 1, 8, 5, "#a0522d") // faceplate area
+  
+  // Speaker Mesh (left side)
+  px(ctx, x + 2, y + 2, 3, 3, meshColor)
+  for(let i=0; i<3; i++) px(ctx, x + 2 + i, y + 2, 0.5, 3, "rgba(0,0,0,0.2)") // mesh lines
+  
+  // Tuning Dials (right side)
+  px(ctx, x + 6, y + 2, 2, 2, dialColor) // large dial
+  px(ctx, x + 6.5, y + 2.5, 1, 1, "#1a0f0a") // dial center
+  px(ctx, x + 6, y + 4.5, 1, 1, "#111") // small knob 1
+  px(ctx, x + 7.5, y + 4.5, 1, 1, "#111") // small knob 2
+  
+  // Antenna
+  ctx.strokeStyle = "#555"
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo((x + 8) * PIXEL, y * PIXEL)
+  ctx.lineTo((x + 12) * PIXEL, (y - 5) * PIXEL)
+  ctx.stroke()
+}
+
+function drawMonstera(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // 1. Soil (Dark rich brown)
+  px(ctx, x + 3, y + 13, 4, 1, "#3d2b1f")
+
+  // 2. Terracotta Pot (Improved with shading and rim depth)
+  const potBase = "#cd5c5c" 
+  const potRim = "#e9967a"
+  const potShadow = "#8b3a3a"
+  const potHighlight = "#f08080"
+
+  // Pot body with depth
+  px(ctx, x + 2, y + 14, 6, 4, potBase) 
+  px(ctx, x + 7, y + 14, 1, 4, potShadow) // Right side shadow
+  px(ctx, x + 2, y + 14, 1, 4, potHighlight) // Left side highlight
+  px(ctx, x + 2, y + 17, 6, 1, potShadow) // Bottom shadow
+
+  // Rim with overhang
+  px(ctx, x + 1, y + 12, 8, 2, potRim)
+  px(ctx, x + 1, y + 13, 8, 1, potShadow) // Under-rim shadow
+
+  // 3. Monstera Leaves (Deeper, holey, more aesthetic)
+  const darkG = "#0f2e0f"     // Deepest shadow
+  const midG = "#1a3c1a"      // Base green
+  const lightG = "#2d5a27"    // Highlighted green
+  const accentG = "#4a7c44"   // Bright edge
+
+  // Stem structure (Improved)
+  px(ctx, x + 4, y + 8, 1, 5, midG)
+  px(ctx, x + 5, y + 6, 1, 7, midG)
+  px(ctx, x + 3, y + 9, 1, 4, midG)
+
+  // Top-Right Leaf (Large, overlaps bookshelf slightly)
+  px(ctx, x + 6, y - 2, 7, 8, darkG)
+  px(ctx, x + 7, y - 1, 5, 6, midG)
+  px(ctx, x + 9, y + 1, 1, 1, "rgba(0,0,0,0.2)") // Hole shadow
+  px(ctx, x + 11, y + 3, 1, 1, "rgba(0,0,0,0.2)") // Hole shadow
+
+  // Top-Left Leaf
+  px(ctx, x - 3, y + 1, 6, 7, midG)
+  px(ctx, x - 2, y + 2, 4, 5, lightG)
+  px(ctx, x - 1, y + 4, 1, 1, "rgba(0,0,0,0.2)")
+
+  // Lower-Left Leaf
+  px(ctx, x - 5, y + 8, 7, 6, midG)
+  px(ctx, x - 4, y + 9, 5, 4, lightG)
+  px(ctx, x - 2, y + 10, 1, 1, "rgba(0,0,0,0.2)")
+
+  // Lower-Right Leaf
+  px(ctx, x + 8, y + 6, 6, 7, darkG)
+  px(ctx, x + 9, y + 7, 4, 5, midG)
+
+  // Center Small Leaf (Foreground)
+  px(ctx, x + 1, y + 6, 4, 5, accentG)
+  px(ctx, x + 2, y + 7, 2, 3, lightG)
+}
+
+function drawWallPhone(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Vintage Wall-mounted Rotary Phone
+  const bodyColor = "#2a2a2a"
+  const handsetColor = "#1a1a1a"
+  const dialColor = "#e8d5b8"
+
+  // Main Body (Backbox)
+  px(ctx, x, y, 6, 8, bodyColor)
+  px(ctx, x + 1, y + 1, 4, 6, "#333") // inner face
+
+  // The Rotary Dial
+  px(ctx, x + 2, y + 3, 2, 2, dialColor)
+  px(ctx, x + 2.5, y + 3.5, 1, 1, bodyColor) // center of dial
+
+  // The Handset (Cradle + Phone)
+  px(ctx, x - 1, y, 1, 2, handsetColor) // cradle left
+  px(ctx, x + 6, y, 1, 2, handsetColor) // cradle right
+  
+  // Handset itself (hanging on the left)
+  px(ctx, x - 2, y + 1, 2, 8, handsetColor)
+  px(ctx, x - 2, y + 1, 2, 2, "#000") // earpiece
+  px(ctx, x - 2, y + 7, 2, 2, "#000") // mouthpiece
+  
+  // Coiled Cord (Simplified pixel dots)
+  px(ctx, x - 1, y + 9, 1, 1, "#444")
+  px(ctx, x, y + 10, 1, 1, "#444")
+  px(ctx, x + 1, y + 9, 1, 1, "#444")
+}
+
 function drawEspressoMachine(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -219,7 +425,6 @@ function drawEspressoMachine(
   px(ctx, x + 7, y + 10, 2, 2, "#404040")
   px(ctx, x + 2, y + 11, 12, 1, "#505050")
 }
-
 function drawCoffeeGrinder(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -514,38 +719,30 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
   const pcW = Math.floor(pw * 0.30)
   const pcX = pw - pcW - 5
 
+  // Layout calculations matching renderCafe
+  const gapStart = 5 + bcW
+  const totalGapWidth = pcX - gapStart
+  const plantWidth = 14
+  const shelfWidth = 24
+  const spacing = Math.max(2, Math.floor((totalGapWidth - (plantWidth + shelfWidth)) / 3))
+  const shelfX = gapStart + spacing + plantWidth + spacing
+
   return [
     {
-      x: 24,
-      y: 16,
-      width: 40,
-      height: 60,
-      label: "Bookshelf - Skills",
-      type: "skills",
+      x: 12,
+      y: 100,
+      width: 14,
+      height: 25,
+      label: "Radio - Projects",
+      type: "projects",
     },
     {
-      x: 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2) - 17,
+      x: shelfX - 12,
       y: 18,
       width: 34,
-      height: 60,
+      height: 80,
       label: "Chalkboard - Education",
       type: "education",
-    },
-    {
-      x: 5,
-      y: 18,
-      width: 16,
-      height: 60,
-      label: "Window - Contact",
-      type: "contact",
-    },
-    {
-      x: pw - 22,
-      y: 18,
-      width: 16,
-      height: 60,
-      label: "Window - Welcome",
-      type: "about",
     },
     {
       x: 5 + Math.floor(bcW * 0.5),
@@ -554,6 +751,14 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       height: 14,
       label: "Barista - About Me",
       type: "resume",
+    },
+    {
+      x: 5 + Math.floor(bcW * 0.5) + 35,
+      y: 34,
+      width: 6,
+      height: 40, // Increased height to bring interaction center closer to player path
+      label: "Phone - Contact Me",
+      type: "contact",
     },
     {
       x: pw - pcW - 5,
@@ -705,17 +910,43 @@ export function renderCafe(
   const bcW = Math.floor(pw * 0.45)
   const pcW = Math.floor(pw * 0.30)
   const pcX = pw - pcW - 5
-
-  const gapMid = 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2)
   
-  // Menu Board (Acts as Education interaction point)
-  drawChalkboard(ctx, gapMid - 17, 18, "MENU", ["Today's Special", "Latte", "Donut"])
+  // New Uniform Layout Logic:
+  // Objects to place in gap: [Billing Counter] |Space| [Monstera] |Space| [Bookshelf] |Space| [Pastry Counter]
+  const gapStart = 5 + bcW
+  const gapEnd = pcX
+  const totalGapWidth = gapEnd - gapStart
+  
+  const plantWidth = 14 // Monstera width is roughly 14 units (-5 to +9)
+  const shelfWidth = 24 // GrandBookshelf width
+  
+  // We need 3 uniform spaces
+  const totalObjectWidth = plantWidth + shelfWidth
+  const spacing = Math.max(2, Math.floor((totalGapWidth - totalObjectWidth) / 3))
+  
+  const plantX = gapStart + spacing + 5 // +5 because drawMonstera uses x as a center-ish point
+  const shelfX = gapStart + spacing + plantWidth + spacing
+  
+  // Menu Board (Shifted left for better visibility and access)
+  drawChalkboard(ctx, shelfX - 12, 18, "MENU", ["Today's Special", "Latte", "Donut"])
+
+  // Grand Bookshelf (Projects)
+  drawGrandBookshelf(ctx, shelfX, 44)
+  
+  // Large Floor Monstera - Positioned uniformly and aligned with bookshelf base
+  drawMonstera(ctx, plantX, 57)
 
   // Billing Counter (Left, 45%)
   drawCounter(ctx, 5, bcW)
   drawEspressoMachine(ctx, 15, 46)
   drawCashRegister(ctx, 15 + Math.floor(bcW * 0.3), 49)
-  drawBarista(ctx, 5 + Math.floor(bcW * 0.5), 46, time)
+  
+  const baristaX = 5 + Math.floor(bcW * 0.5)
+  drawBarista(ctx, baristaX, 46, time)
+  
+  // Wall Phone shifted further right of Barista (to ensure E prompt is accessible)
+  drawWallPhone(ctx, baristaX + 35, 34)
+
   drawCoffeeGrinder(ctx, 5 + Math.floor(bcW * 0.8), 48)
 
   // Pastry Counter (Right, 30%)
@@ -736,6 +967,10 @@ export function renderCafe(
 
   // Floor
   drawFloor(ctx, pw, ph, 82)
+
+  // Vintage Radio on Stool (Projects Station) - Moved right and down for visibility
+  drawRusticStool(ctx, 16, 100)
+  drawVintageRadio(ctx, 14, 93)
 
   // Scattered Aesthetic Tables (8 tables)
   const tablePositions = [
