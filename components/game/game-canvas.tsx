@@ -10,15 +10,22 @@ import type { InteractiveZone } from "./pixel-cafe-renderer"
 
 interface GameCanvasProps {
   onInteract: (type: InteractiveZone["type"]) => void
+  catInteractionTime: number
 }
 
-export default function GameCanvas({ onInteract }: GameCanvasProps) {
+export default function GameCanvas({ onInteract, catInteractionTime }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animFrameRef = useRef<number>(0)
   const keysRef = useRef<Set<string>>(new Set())
   const playerRef = useRef({ x: 80, y: 90 })
+  const catIntRef = useRef(catInteractionTime)
   const [nearZone, setNearZone] = useState<InteractiveZone | null>(null)
   const [canvasSize, setCanvasSize] = useState({ w: 960, h: 420 })
+
+  // Keep ref in sync with prop
+  useEffect(() => {
+    catIntRef.current = catInteractionTime
+  }, [catInteractionTime])
 
   // Handle resize
   useEffect(() => {
@@ -46,7 +53,7 @@ export default function GameCanvas({ onInteract }: GameCanvasProps) {
     const minX = 3
     const maxX = pw - 8
     const minY = 72
-    const maxY = ph - 14
+    const maxY = Math.max(ph - 14, 150) // Allow walking further down even on smaller screens
 
     let running = true
 
@@ -77,7 +84,8 @@ export default function GameCanvas({ onInteract }: GameCanvasProps) {
         const dx = player.x - zoneCX
         const dy = player.y - zoneCY
         const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 25 && dist < closestDist) {
+        // Slightly larger interaction distance for easier access
+        if (dist < 30 && dist < closestDist) {
           closestDist = dist
           closestZone = zone
         }
@@ -91,7 +99,8 @@ export default function GameCanvas({ onInteract }: GameCanvasProps) {
         time,
         Math.round(player.x),
         Math.round(player.y),
-        closestZone
+        closestZone,
+        catIntRef.current
       )
 
       animFrameRef.current = requestAnimationFrame(gameLoop)

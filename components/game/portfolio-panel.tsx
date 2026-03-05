@@ -149,56 +149,56 @@ const panelContent = {
     ),
   },
   skills: {
-    title: "Skills & Tools",
-    subtitle: "My Toolkit",
+    title: "Skills & Experience",
+    subtitle: "Harmony of Code and Research",
     content: (
-      <div className="flex flex-col gap-4">
-        {[
-          {
-            category: "Frontend",
-            skills: [
-              "React",
-              "Next.js",
-              "TypeScript",
-              "Tailwind CSS",
-              "Three.js",
-            ],
-          },
-          {
-            category: "Backend",
-            skills: ["Node.js", "Python", "PostgreSQL", "Redis", "GraphQL"],
-          },
-          {
-            category: "DevOps",
-            skills: [
-              "Docker",
-              "AWS",
-              "Vercel",
-              "GitHub Actions",
-              "Terraform",
-            ],
-          },
-          {
-            category: "Design",
-            skills: ["Figma", "Framer", "Pixel Art", "UI/UX", "Motion"],
-          },
-        ].map((group) => (
-          <div key={group.category}>
-            <h3 className="text-[#e8a857] font-bold text-xs uppercase tracking-wider mb-2">
-              {group.category}
-            </h3>
-            <div className="flex gap-2 flex-wrap">
-              {group.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-xs px-2.5 py-1 rounded-md bg-[#3d2618] text-[#d4c0a0] border border-[#4a2e1c] hover:border-[#c87941] hover:text-[#e8a857] transition-colors cursor-default"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+      <div className="flex flex-col gap-6">
+        {/* Experience Section */}
+        <div>
+          <h3 className="text-[#e8a857] font-bold text-xs uppercase tracking-wider mb-3 flex items-center gap-2">
+            <Trophy className="w-4 h-4" /> Professional Experience
+          </h3>
+          <div className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/60 hover:border-[#c87941] transition-all group">
+            <h4 className="text-[#f5e6d3] font-bold text-sm">Undergraduate Student Researcher</h4>
+            <p className="text-[#c87941] text-xs font-semibold leading-tight mt-1">
+              Kennesaw State University - Southern Polytechnic College of Engineering and Engineering Technology
+            </p>
+            <p className="text-[#a68b6b] text-[10px] uppercase font-bold tracking-tighter mt-1 mb-3 opacity-80">
+              Internship | Feb 2025 - Jul 2025
+            </p>
+            <p className="text-[#d4c0a0] text-xs leading-relaxed italic border-l-2 border-[#c87941]/30 pl-3">
+              "Worked under Dr. Sumit Chakravarty Sir, on comparative risk assessment of VRUs and AVs across urban intersections."
+            </p>
           </div>
-        ))}
+        </div>
+
+        {/* Skills Grid */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-[#e8a857] font-bold text-xs uppercase tracking-wider mb-1 flex items-center gap-2">
+            <Zap className="w-4 h-4" /> Technical Arsenal
+          </h3>
+          {[
+            { category: "Languages", skills: ["Python", "SQL", "C"] },
+            { category: "Frameworks", skills: ["Pandas", "Numpy", "Matplotlib"] },
+            { category: "Tools", skills: ["Power BI", "Power Point", "Excel", "SQLPlus"] },
+            { category: "Platforms", skills: ["Jupyter Notebook", "Visual Studio Code"] },
+            { category: "Soft Skills", skills: ["Problem Solving", "Attention to details", "Analytical Thinking", "Time Management", "Team Collaboration"] },
+          ].map((group) => (
+            <div key={group.category} className="flex flex-col gap-2">
+              <span className="text-[10px] text-[#a68b6b] font-bold uppercase tracking-tight">{group.category}</span>
+              <div className="flex gap-2 flex-wrap">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="text-[11px] px-2.5 py-1 rounded-md bg-[#3d2618] text-[#d4c0a0] border border-[#4a2e1c] hover:border-[#c87941] hover:text-[#f5e6d3] transition-colors"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     ),
   },
@@ -298,7 +298,7 @@ const panelContent = {
     content: (
       <div className="flex flex-col gap-4">
         <p className="text-[#d4c0a0] leading-relaxed">
-          I'm a passionate developer focused on bringing ideas to life through creative coding and data science. My work combines curiosity for machine learning and practical software engineering to build innovative solutions and share knowledge with the tech community.
+          I'm Aaditi Menon, a passionate developer focused on bringing ideas to life through creative coding and data science. My work combines curiosity for machine learning and practical software engineering to build innovative solutions and share knowledge with the tech community.
         </p>
         <p className="text-[#d4c0a0] leading-relaxed">
           Actively contributing to open-source, I enjoy collaborating, exploring data, and continually expanding my skillset. Whether it's researching urban mobility or developing intelligent network solutions, I’m driven by the challenge of solving real-world problems and creating something meaningful.
@@ -386,12 +386,35 @@ const panelContent = {
       </div>
     ),
   },
+  cat: {
+    title: "Mochi the Cat",
+    subtitle: "The cafe's quietest resident",
+    content: null, // Handled by custom logic in the component
+  }
 }
+
+const catReactions = [
+  { text: "Mochi purrs loudly as you pat her head.", icon: "🐱" },
+  { text: "Mochi stretches her paws and looks at you with half-closed eyes.", icon: "🐾" },
+  { text: "Mochi gives you a gentle headbutt. She seems to like you!", icon: "✨" },
+  { text: "Mochi rolls over, showing her belly. A sign of true trust.", icon: "🧡" },
+  { text: "Mochi lets out a tiny, soft 'mew' and goes back to sleep.", icon: "💤" },
+];
 
 export default function PortfolioPanel({ type, onClose }: PortfolioPanelProps) {
   const panel = panelContent[type]
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [catReactionIdx, setCatReactionIdx] = useState(0)
+  const [isPatting, setIsPatting] = useState(false)
+
+  const handlePatCat = () => {
+    setIsPatting(true);
+    setTimeout(() => {
+      setIsPatting(false);
+      setCatReactionIdx((prev) => (prev + 1) % catReactions.length);
+    }, 600);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -440,7 +463,42 @@ export default function PortfolioPanel({ type, onClose }: PortfolioPanelProps) {
         </div>
 
         <div className="p-4 overflow-y-auto max-h-[calc(80vh-80px)]">
-          {type === 'contact' && isSubmitted ? (
+          {type === 'cat' ? (
+            <div className="flex flex-col items-center gap-6 py-4">
+              <div className="relative group cursor-pointer" onClick={handlePatCat}>
+                <div className={`text-6xl transition-all duration-300 ${isPatting ? 'scale-110 -translate-y-2' : 'group-hover:scale-105'}`}>
+                  🐱
+                </div>
+                {isPatting && (
+                  <div className="absolute -top-4 -right-2 text-2xl animate-bounce">
+                    ✨
+                  </div>
+                )}
+              </div>
+              
+              <div className="bg-[#2a1a10]/60 p-6 rounded-2xl border border-[#4a2e1c] text-center w-full min-h-[140px] flex flex-col items-center justify-center gap-4 transition-all duration-500">
+                <span className="text-3xl animate-pulse">
+                  {catReactions[catReactionIdx].icon}
+                </span>
+                <p className="text-[#f5e6d3] italic leading-relaxed">
+                  "{catReactions[catReactionIdx].text}"
+                </p>
+              </div>
+
+              <button
+                onClick={handlePatCat}
+                disabled={isPatting}
+                className="w-full bg-[#c87941] text-[#1a0f0a] font-bold py-4 rounded-xl hover:bg-[#e8a857] transition-all shadow-lg active:scale-95 flex items-center justify-center gap-3 group disabled:opacity-50"
+              >
+                <Palette className={`w-5 h-5 transition-transform ${isPatting ? 'rotate-12' : 'group-hover:-rotate-12'}`} />
+                Pat Mochi the Cat
+              </button>
+              
+              <p className="text-[10px] text-[#a68b6b] uppercase font-bold tracking-widest opacity-60">
+                Interactions: {catReactionIdx + 1} / {catReactions.length}
+              </p>
+            </div>
+          ) : type === 'contact' && isSubmitted ? (
             <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in zoom-in duration-500">
               <div className="w-16 h-16 bg-[#c87941]/20 rounded-full flex items-center justify-center mb-4 text-[#c87941]">
                 <Zap className="w-8 h-8" />
