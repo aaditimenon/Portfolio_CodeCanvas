@@ -1,6 +1,6 @@
 // Pixel Art Cafe Renderer - draws the cafe environment on canvas
 
-export const PIXEL = 3
+export const PIXEL = 4
 
 const C = {
   ceiling: "#5a3520",
@@ -12,9 +12,9 @@ const C = {
   counterTop: "#c89660",
   counterFront: "#a0724a",
   counterShadow: "#7a5430",
-  floorLight: "#c8a882",
-  floorDark: "#a08060",
-  floorAccent: "#8b6e50",
+  floorLight: "#d0d8e0",
+  floorDark: "#b0c0d0",
+  floorAccent: "#90a0b0",
   tableTop: "#d4a878",
   tableLeg: "#6b4226",
   chairSeat: "#c87941",
@@ -40,6 +40,10 @@ const C = {
   baristaApron: "#2a2a2a",
   baristaSkin: "#e0b090",
   interactGlow: "#ffe066",
+  pastryCaseFrame: "#5a6a6a",
+  pastryCaseGlass: "rgba(180, 230, 255, 0.15)",
+  cashRegisterBody: "#2a2a2a",
+  cashRegisterScreen: "#32ff32",
 }
 
 function px(
@@ -186,14 +190,126 @@ function drawCoffeeGrinder(
   px(ctx, x + 2, y + 8, 4, 2, "#505050")
 }
 
-function drawCounter(ctx: CanvasRenderingContext2D, w: number) {
+function drawPastry(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  type: "croissant" | "cupcake_white" | "muffin_choco" | "muffin_gold" | "cookie"
+) {
+  // Plate from the image: elliptical white ceramic
+  px(ctx, x - 4, y + 3, 12, 1, "rgba(0,0,0,0.15)") // shadow
+  px(ctx, x - 4, y + 2, 12, 2, "#ffffff") // plate top
+  px(ctx, x - 3, y + 4, 10, 1, "#e0e0e0") // plate edge
+
+  if (type === "croissant") {
+    // Exact colors from image
+    px(ctx, x, y, 5, 3, "#d4a060") // Body
+    px(ctx, x + 1, y - 1, 3, 1, "#f5d5a5") // Top ridge
+    px(ctx, x - 1, y + 1, 1, 2, "#8b5e3c") // Left curve
+    px(ctx, x + 5, y + 1, 1, 2, "#8b5e3c") // Right curve
+    px(ctx, x + 1, y + 1, 1, 2, "#8b5e3c") // Depth line
+    px(ctx, x + 3, y + 1, 1, 2, "#8b5e3c") // Depth line
+  } else if (type === "cupcake_white") {
+    // White frosting cupcake with cherry
+    px(ctx, x + 1, y, 3, 3, "#3e2723") // Dark chocolate base
+    px(ctx, x, y - 2, 5, 3, "#ffffff") // Tall white frosting
+    px(ctx, x + 1, y - 3, 3, 1, "#ffffff") // Frosting peak
+    px(ctx, x + 2, y - 4, 1, 1, "#d32f2f") // Bright red cherry
+  } else if (type === "muffin_choco") {
+    // Dark chocolate muffin
+    px(ctx, x + 1, y + 1, 3, 2, "#211007") // Dark base
+    px(ctx, x - 1, y - 1, 7, 3, "#3e2723") // Dark top
+    px(ctx, x, y, 1, 1, "#000000") // Chip
+    px(ctx, x + 4, y + 1, 1, 1, "#000000") // Chip
+  } else if (type === "muffin_gold") {
+    // Golden muffin
+    px(ctx, x + 1, y + 1, 3, 2, "#8b5e3c") // Brown base
+    px(ctx, x - 1, y - 1, 7, 3, "#d4a060") // Golden top
+    px(ctx, x + 1, y - 1, 3, 1, "#f5d5a5") // Highlight
+  } else if (type === "cookie") {
+    // Flat golden cookie with chips
+    px(ctx, x, y + 1, 5, 2, "#d4a060") 
+    px(ctx, x + 1, y, 3, 1, "#d4a060")
+    px(ctx, x + 1, y + 1, 1, 1, "#331a00") // Chip
+    px(ctx, x + 3, y + 1, 1, 1, "#331a00") // Chip
+  }
+}
+
+function drawPastryCounter(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number
+) {
+  // High-detail glass case
+  px(ctx, x, y, w, 26, "#5a6a6a") 
+  px(ctx, x + 1, y + 1, w - 2, 24, "rgba(180, 230, 255, 0.15)") 
+
+  // Shelves
+  px(ctx, x + 1, y + 13, w - 2, 1, "#5a6a6a") 
+  px(ctx, x + Math.floor(w / 2), y + 1, 1, 24, "#5a6a6a")
+
+  // Exact distribution from the image
+  const leftX = x + 8
+  const midX = x + Math.floor(w / 4) + 2
+  const rightX = x + Math.floor(w / 2) + 8
+  const farRightX = x + Math.floor(w * 0.75) + 2
+
+  // Top Shelf
+  drawPastry(ctx, leftX, y + 9, "croissant")
+  drawPastry(ctx, midX, y + 9, "cupcake_white")
+  if (w > 50) {
+    drawPastry(ctx, rightX, y + 9, "croissant")
+    drawPastry(ctx, farRightX, y + 9, "muffin_gold")
+  }
+
+  // Bottom Shelf
+  drawPastry(ctx, leftX, y + 21, "muffin_choco")
+  drawPastry(ctx, midX, y + 21, "muffin_gold")
+  if (w > 50) {
+    drawPastry(ctx, rightX, y + 21, "muffin_choco")
+    drawPastry(ctx, farRightX, y + 21, "cookie")
+  }
+
+  // Glass glints
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)"
+  ctx.lineWidth = PIXEL
+  ctx.beginPath()
+  ctx.moveTo((x + 5) * PIXEL, (y + 5) * PIXEL)
+  ctx.lineTo((x + 20) * PIXEL, (y + 20) * PIXEL)
+  ctx.stroke()
+}
+
+function drawCashRegister(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number
+) {
+  // Professional cash register with monitor
+  px(ctx, x, y, 14, 10, "#2a2a2a") // base
+  px(ctx, x + 5, y - 5, 4, 5, "#2a2a2a") // stand
+  px(ctx, x + 1, y - 10, 12, 7, "#111") // monitor frame
+  px(ctx, x + 3, y - 8, 8, 3, "#32ff32") // screen
+  
+  // Decorative plant next to it
+  px(ctx, x + 16, y + 4, 6, 6, "#8b4513") // pot
+  px(ctx, x + 16, y, 6, 4, "#4a8a4a") // plant
+}
+
+function drawCounter(ctx: CanvasRenderingContext2D, x: number, w: number) {
   const y = 58
-  px(ctx, 5, y, w - 10, 3, C.counterTop)
-  px(ctx, 5, y + 3, w - 10, 12, C.counterFront)
-  px(ctx, 5, y + 2, w - 10, 1, C.counterShadow)
-  for (let i = 8; i < w - 10; i += 12) {
-    px(ctx, i, y + 5, 8, 1, C.counterShadow)
-    px(ctx, i + 2, y + 8, 6, 1, C.counterShadow)
+  // Counter Top
+  px(ctx, x, y, w, 3, C.counterTop)
+  px(ctx, x, y + 2, w, 1, C.counterShadow)
+
+  // Counter Front
+  px(ctx, x, y + 3, w, 15, C.counterFront)
+
+  // Elegant Panels
+  for (let i = x + 10; i < x + w - 20; i += 25) {
+    px(ctx, i, y + 6, 15, 10, C.counterShadow)
+    px(ctx, i + 1, y + 7, 13, 8, C.counterFront)
+    px(ctx, i + 1, y + 7, 13, 1, "rgba(255,255,255,0.05)")
   }
 }
 
@@ -284,20 +400,22 @@ function drawFloor(
   startY: number
 ) {
   px(ctx, 0, startY, w, h - startY, C.floorLight)
-  for (let row = 0; row < h - startY; row += 4) {
-    const offset = (Math.floor(row / 4) % 2) * 4
-    for (let col = 0; col < w; col += 8) {
+  const tileSize = 10
+  for (let row = 0; row < h - startY; row += tileSize) {
+    for (let col = 0; col < w; col += tileSize) {
+      const isAlt = (Math.floor(col / tileSize) + Math.floor(row / tileSize)) % 2 === 0
       px(
         ctx,
-        col + offset,
+        col,
         startY + row,
-        7,
-        3,
-        (col + row) % 16 < 8 ? C.floorDark : C.floorAccent
+        tileSize,
+        tileSize,
+        isAlt ? C.floorDark : C.floorAccent
       )
-      px(ctx, col + offset + 7, startY + row, 1, 3, C.floorLight)
+      // Tiling detail - light highlights
+      px(ctx, col, startY + row, tileSize, 1, "rgba(255,255,255,0.03)")
+      px(ctx, col, startY + row, 1, tileSize, "rgba(255,255,255,0.03)")
     }
-    px(ctx, 0, startY + row + 3, w, 1, C.floorLight)
   }
 }
 
@@ -307,11 +425,14 @@ export interface InteractiveZone {
   width: number
   height: number
   label: string
-  type: "about" | "projects" | "skills" | "contact" | "resume"
+  type: "about" | "projects" | "skills" | "contact" | "resume" | "achievements"
 }
 
 export function getInteractiveZones(canvasW: number): InteractiveZone[] {
   const pw = Math.floor(canvasW / PIXEL)
+  const bcW = Math.floor(pw * 0.45)
+  const pcW = Math.floor(pw * 0.30)
+  
   return [
     {
       x: 24,
@@ -346,12 +467,20 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       type: "about",
     },
     {
-      x: Math.floor(pw / 2) - 4,
+      x: 5 + Math.floor(bcW * 0.5),
       y: 46,
       width: 8,
       height: 14,
       label: "Barista - Resume",
       type: "resume",
+    },
+    {
+      x: pw - pcW - 5,
+      y: 42,
+      width: pcW,
+      height: 35,
+      label: "Pastry Case - Achievements",
+      type: "achievements",
     },
   ]
 }
@@ -401,48 +530,77 @@ function drawPlayer(
   time: number
 ) {
   const walkFrame = Math.floor(time / 150) % 4
-  const legOffset = walkFrame % 2
+  const legOffset = (walkFrame % 2) * 1.5
+  const bob = Math.sin(time * 0.01) * 1
 
-  // Shadow
-  ctx.fillStyle = "rgba(0,0,0,0.2)"
+  // Shadow (Wide for chubby sprite)
+  ctx.fillStyle = "rgba(0,0,0,0.1)"
   ctx.beginPath()
   ctx.ellipse(
-    x * PIXEL + 3 * PIXEL,
-    (y + 12) * PIXEL,
-    4 * PIXEL,
-    1.5 * PIXEL,
+    (x + 4) * PIXEL,
+    (y + 15) * PIXEL,
+    7 * PIXEL,
+    2.5 * PIXEL,
     0,
     0,
     Math.PI * 2
   )
   ctx.fill()
 
-  // Legs
-  px(ctx, x + 1, y + 8 + legOffset, 2, 4 - legOffset, "#3a5070")
-  px(ctx, x + 3, y + 8 + (1 - legOffset), 2, 4 - (1 - legOffset), "#3a5070")
-  px(ctx, x + 1, y + 11, 2, 1, "#2a1a10")
-  px(ctx, x + 3, y + 11, 2, 1, "#2a1a10")
+  // Long Flowy Brown Hair (Back Layer)
+  px(ctx, x + 0.5, y + 2 + bob, 8, 11, "#5d4037")
+  px(ctx, x - 0.5, y + 5 + bob, 1.5, 6, "#5d4037") // Extra flowy bits
+  px(ctx, x + 8, y + 5 + bob, 1.5, 6, "#5d4037")
 
-  // Body
-  px(ctx, x, y + 3, 6, 5, "#4a8ab0")
-  px(ctx, x + 2, y + 4, 2, 3, "#5a9ac0")
+  // Bare Legs (Skin tone, slightly wider)
+  px(ctx, x + 2.5, y + 10 + legOffset, 2.5, 5, "#e0b090") // Left
+  px(ctx, x + 4.5, y + 10 - legOffset + 1.5, 2.5, 5, "#e0b090") // Right
+  
+  // Cute Red Shoes
+  px(ctx, x + 2.5, y + 14.5 + legOffset, 2.5, 1, "#d32f2f")
+  px(ctx, x + 4.5, y + 14.5 - legOffset + 1.5, 2.5, 1, "#d32f2f")
 
-  // Arms
-  px(ctx, x - 1, y + 4, 1, 4, "#e0b090")
-  px(ctx, x + 6, y + 4, 1, 4, "#e0b090")
+  // Red Dress (Chubby/Rounded silhouette)
+  px(ctx, x + 1, y + 4 + bob, 7, 7, "#d32f2f") // Dress body
+  px(ctx, x + 0.5, y + 6 + bob, 8, 5, "#b71c1c") // Bottom flare/shading
+  px(ctx, x + 2.5, y + 3.5 + bob, 4, 1, "#ff8a80") // Ribbon/detail
+
+  // Arms (Bare skin)
+  px(ctx, x - 0.5, y + 5 + bob, 1.5, 5, "#e0b090") // Left
+  px(ctx, x + 8, y + 5 + bob, 1.5, 5, "#e0b090") // Right
 
   // Head
-  px(ctx, x + 1, y, 4, 3, "#e0b090")
-  px(ctx, x + 1, y - 1, 4, 2, "#3a2010")
-  px(ctx, x + 2, y + 1, 1, 1, "#1a0f0a")
-  px(ctx, x + 4, y + 1, 1, 1, "#1a0f0a")
+  px(ctx, x + 2.5, y - 1 + bob, 4.5, 5, "#e0b090") // Face
+  
+  // Face Details
+  px(ctx, x + 3, y + 2 + bob, 1, 1, "#111") // Left Eye
+  px(ctx, x + 5.5, y + 2 + bob, 1, 1, "#111") // Right Eye
+  px(ctx, x + 2.5, y + 3 + bob, 1, 0.8, "#ff8a80") // Left Blush
+  px(ctx, x + 6, y + 3 + bob, 1, 0.8, "#ff8a80") // Right Blush
+  px(ctx, x + 4, y + 3.5 + bob, 2, 0.5, "#8b5e3c") // Smile
 
-  // Glow
-  const glowAlpha = 0.5 + Math.sin(time * 0.003) * 0.2
-  ctx.fillStyle = "rgba(200, 121, 65, " + glowAlpha + ")"
-  ctx.beginPath()
-  ctx.arc((x + 3) * PIXEL, (y + 6) * PIXEL, 1.5 * PIXEL, 0, Math.PI * 2)
-  ctx.fill()
+  // Cute Hat (Straw/Summer style with red band)
+  px(ctx, x + 1.5, y - 3 + bob, 6, 2, "#f5d5a5") // Hat top
+  px(ctx, x + 0.5, y - 1.5 + bob, 8, 1.5, "#f5d5a5") // Hat brim
+  px(ctx, x + 1.5, y - 1.5 + bob, 6, 0.8, "#d32f2f") // Hat band
+  
+  // Hair (Front bangs/framing)
+  px(ctx, x + 2, y - 1 + bob, 5, 2, "#5d4037")
+  px(ctx, x + 1.5, y + 1 + bob, 1, 5, "#5d4037")
+  px(ctx, x + 7, y + 1 + bob, 1, 5, "#5d4037")
+}
+
+function drawFloralPlatform(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number
+) {
+  // Neutral Taupe Platform Base (Asset pack style)
+  px(ctx, x, y, w, h, "#bda27e") 
+  px(ctx, x, y, w, 1, "#d4bc9c") // top highlight
+  px(ctx, x, y + h - 1, w, 1, "#8b7355") // bottom shadow
 }
 
 export function renderCafe(
@@ -475,14 +633,25 @@ export function renderCafe(
   drawChalkboard(ctx, boardX, 18)
 
   // Counter area
-  drawEspressoMachine(ctx, Math.floor(pw / 2) - 25, 46)
-  drawCoffeeGrinder(ctx, Math.floor(pw / 2) + 15, 48)
-  drawBarista(ctx, Math.floor(pw / 2) - 4, 46, time)
-  drawCounter(ctx, pw)
+  const bcW = Math.floor(pw * 0.45)
+  const pcW = Math.floor(pw * 0.30)
+  
+  // Billing Counter (Left, 45%)
+  drawCounter(ctx, 5, bcW)
+  drawEspressoMachine(ctx, 15, 46)
+  drawCashRegister(ctx, 15 + Math.floor(bcW * 0.3), 49)
+  drawBarista(ctx, 5 + Math.floor(bcW * 0.5), 46, time)
+  drawCoffeeGrinder(ctx, 5 + Math.floor(bcW * 0.8), 48)
 
-  // Bar stools
-  for (let i = 0; i < 6; i++) {
-    drawBarStool(ctx, 18 + i * Math.floor((pw - 40) / 6), 73)
+  // Pastry Counter (Right, 30%)
+  const pcX = pw - pcW - 5
+  drawFloralPlatform(ctx, pcX, 60, pcW, 22) // Green floral base
+  drawPastryCounter(ctx, pcX, 34, pcW)
+
+  // Bar stools (Only under billing counter)
+  const stoolCount = Math.floor(bcW / 25)
+  for (let i = 0; i < stoolCount; i++) {
+    drawBarStool(ctx, 10 + i * 25, 73)
   }
 
   // Pendant lights
