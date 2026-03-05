@@ -325,27 +325,88 @@ function drawVintageRadio(ctx: CanvasRenderingContext2D, x: number, y: number) {
 }
 
 function drawMonstera(ctx: CanvasRenderingContext2D, x: number, y: number) {
-  // Terracotta Pot
-  px(ctx, x + 2, y + 14, 6, 4, "#cd5c5c") // pot body
-  px(ctx, x + 1, y + 14, 8, 1, "#e9967a") // rim
+  // 1. Soil (Dark rich brown)
+  px(ctx, x + 3, y + 13, 4, 1, "#3d2b1f")
+
+  // 2. Terracotta Pot (Improved with shading and rim depth)
+  const potBase = "#cd5c5c" 
+  const potRim = "#e9967a"
+  const potShadow = "#8b3a3a"
+  const potHighlight = "#f08080"
+
+  // Pot body with depth
+  px(ctx, x + 2, y + 14, 6, 4, potBase) 
+  px(ctx, x + 7, y + 14, 1, 4, potShadow) // Right side shadow
+  px(ctx, x + 2, y + 14, 1, 4, potHighlight) // Left side highlight
+  px(ctx, x + 2, y + 17, 6, 1, potShadow) // Bottom shadow
+
+  // Rim with overhang
+  px(ctx, x + 1, y + 12, 8, 2, potRim)
+  px(ctx, x + 1, y + 13, 8, 1, potShadow) // Under-rim shadow
+
+  // 3. Monstera Leaves (Deeper, holey, more aesthetic)
+  const darkG = "#0f2e0f"     // Deepest shadow
+  const midG = "#1a3c1a"      // Base green
+  const lightG = "#2d5a27"    // Highlighted green
+  const accentG = "#4a7c44"   // Bright edge
+
+  // Stem structure (Improved)
+  px(ctx, x + 4, y + 8, 1, 5, midG)
+  px(ctx, x + 5, y + 6, 1, 7, midG)
+  px(ctx, x + 3, y + 9, 1, 4, midG)
+
+  // Top-Right Leaf (Large, overlaps bookshelf slightly)
+  px(ctx, x + 6, y - 2, 7, 8, darkG)
+  px(ctx, x + 7, y - 1, 5, 6, midG)
+  px(ctx, x + 9, y + 1, 1, 1, "rgba(0,0,0,0.2)") // Hole shadow
+  px(ctx, x + 11, y + 3, 1, 1, "rgba(0,0,0,0.2)") // Hole shadow
+
+  // Top-Left Leaf
+  px(ctx, x - 3, y + 1, 6, 7, midG)
+  px(ctx, x - 2, y + 2, 4, 5, lightG)
+  px(ctx, x - 1, y + 4, 1, 1, "rgba(0,0,0,0.2)")
+
+  // Lower-Left Leaf
+  px(ctx, x - 5, y + 8, 7, 6, midG)
+  px(ctx, x - 4, y + 9, 5, 4, lightG)
+  px(ctx, x - 2, y + 10, 1, 1, "rgba(0,0,0,0.2)")
+
+  // Lower-Right Leaf
+  px(ctx, x + 8, y + 6, 6, 7, darkG)
+  px(ctx, x + 9, y + 7, 4, 5, midG)
+
+  // Center Small Leaf (Foreground)
+  px(ctx, x + 1, y + 6, 4, 5, accentG)
+  px(ctx, x + 2, y + 7, 2, 3, lightG)
+}
+
+function drawWallPhone(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Vintage Wall-mounted Rotary Phone
+  const bodyColor = "#2a2a2a"
+  const handsetColor = "#1a1a1a"
+  const dialColor = "#e8d5b8"
+
+  // Main Body (Backbox)
+  px(ctx, x, y, 6, 8, bodyColor)
+  px(ctx, x + 1, y + 1, 4, 6, "#333") // inner face
+
+  // The Rotary Dial
+  px(ctx, x + 2, y + 3, 2, 2, dialColor)
+  px(ctx, x + 2.5, y + 3.5, 1, 1, bodyColor) // center of dial
+
+  // The Handset (Cradle + Phone)
+  px(ctx, x - 1, y, 1, 2, handsetColor) // cradle left
+  px(ctx, x + 6, y, 1, 2, handsetColor) // cradle right
   
-  // Monstera Leaves (Large, holey silhouette)
-  const darkG = "#1a3c1a"
-  const midG = "#2d5a27"
+  // Handset itself (hanging on the left)
+  px(ctx, x - 2, y + 1, 2, 8, handsetColor)
+  px(ctx, x - 2, y + 1, 2, 2, "#000") // earpiece
+  px(ctx, x - 2, y + 7, 2, 2, "#000") // mouthpiece
   
-  // Stem structure
-  px(ctx, x + 4, y + 8, 1, 6, darkG)
-  px(ctx, x + 5, y + 6, 1, 8, darkG)
-  
-  // Large Leaves
-  px(ctx, x - 2, y + 2, 5, 6, midG) // Leaf 1
-  px(ctx, x - 1, y + 3, 1, 1, "#1a0f0a") // Monstera hole
-  
-  px(ctx, x + 6, y, 6, 7, darkG) // Leaf 2
-  px(ctx, x + 8, y + 2, 1, 2, "#1a0f0a") // Monstera hole
-  
-  px(ctx, x - 4, y + 8, 6, 5, darkG) // Leaf 3
-  px(ctx, x + 8, y + 7, 5, 6, midG) // Leaf 4
+  // Coiled Cord (Simplified pixel dots)
+  px(ctx, x - 1, y + 9, 1, 1, "#444")
+  px(ctx, x, y + 10, 1, 1, "#444")
+  px(ctx, x + 1, y + 9, 1, 1, "#444")
 }
 
 function drawEspressoMachine(
@@ -364,7 +425,6 @@ function drawEspressoMachine(
   px(ctx, x + 7, y + 10, 2, 2, "#404040")
   px(ctx, x + 2, y + 11, 12, 1, "#505050")
 }
-
 function drawCoffeeGrinder(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -659,6 +719,14 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
   const pcW = Math.floor(pw * 0.30)
   const pcX = pw - pcW - 5
 
+  // Layout calculations matching renderCafe
+  const gapStart = 5 + bcW
+  const totalGapWidth = pcX - gapStart
+  const plantWidth = 14
+  const shelfWidth = 24
+  const spacing = Math.max(2, Math.floor((totalGapWidth - (plantWidth + shelfWidth)) / 3))
+  const shelfX = gapStart + spacing + plantWidth + spacing
+
   return [
     {
       x: 12,
@@ -669,7 +737,7 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       type: "projects",
     },
     {
-      x: 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2) - 17,
+      x: shelfX - 12,
       y: 18,
       width: 34,
       height: 80,
@@ -683,6 +751,14 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       height: 14,
       label: "Barista - About Me",
       type: "resume",
+    },
+    {
+      x: 5 + Math.floor(bcW * 0.5) + 35,
+      y: 34,
+      width: 6,
+      height: 40, // Increased height to bring interaction center closer to player path
+      label: "Phone - Contact Me",
+      type: "contact",
     },
     {
       x: pw - pcW - 5,
@@ -834,22 +910,43 @@ export function renderCafe(
   const bcW = Math.floor(pw * 0.45)
   const pcW = Math.floor(pw * 0.30)
   const pcX = pw - pcW - 5
-  const gapMid = 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2)
   
-  // Menu Board (Acts as Education interaction point)
-  drawChalkboard(ctx, gapMid - 17, 18, "MENU", ["Today's Special", "Latte", "Donut"])
+  // New Uniform Layout Logic:
+  // Objects to place in gap: [Billing Counter] |Space| [Monstera] |Space| [Bookshelf] |Space| [Pastry Counter]
+  const gapStart = 5 + bcW
+  const gapEnd = pcX
+  const totalGapWidth = gapEnd - gapStart
+  
+  const plantWidth = 14 // Monstera width is roughly 14 units (-5 to +9)
+  const shelfWidth = 24 // GrandBookshelf width
+  
+  // We need 3 uniform spaces
+  const totalObjectWidth = plantWidth + shelfWidth
+  const spacing = Math.max(2, Math.floor((totalGapWidth - totalObjectWidth) / 3))
+  
+  const plantX = gapStart + spacing + 5 // +5 because drawMonstera uses x as a center-ish point
+  const shelfX = gapStart + spacing + plantWidth + spacing
+  
+  // Menu Board (Shifted left for better visibility and access)
+  drawChalkboard(ctx, shelfX - 12, 18, "MENU", ["Today's Special", "Latte", "Donut"])
 
-  // Grand Bookshelf (Projects) - Positioned below the Menu Board
-  drawGrandBookshelf(ctx, gapMid - 12, 44)
+  // Grand Bookshelf (Projects)
+  drawGrandBookshelf(ctx, shelfX, 44)
   
-  // Large Floor Monstera - Beside the bookshelf
-  drawMonstera(ctx, gapMid - 28, 55)
+  // Large Floor Monstera - Positioned uniformly and aligned with bookshelf base
+  drawMonstera(ctx, plantX, 57)
 
   // Billing Counter (Left, 45%)
   drawCounter(ctx, 5, bcW)
   drawEspressoMachine(ctx, 15, 46)
   drawCashRegister(ctx, 15 + Math.floor(bcW * 0.3), 49)
-  drawBarista(ctx, 5 + Math.floor(bcW * 0.5), 46, time)
+  
+  const baristaX = 5 + Math.floor(bcW * 0.5)
+  drawBarista(ctx, baristaX, 46, time)
+  
+  // Wall Phone shifted further right of Barista (to ensure E prompt is accessible)
+  drawWallPhone(ctx, baristaX + 35, 34)
+
   drawCoffeeGrinder(ctx, 5 + Math.floor(bcW * 0.8), 48)
 
   // Pastry Counter (Right, 30%)
