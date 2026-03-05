@@ -10,10 +10,11 @@ import {
   Code,
   Palette,
   Zap,
+  Trophy,
 } from "lucide-react"
 
 interface PortfolioPanelProps {
-  type: "about" | "projects" | "skills" | "contact" | "resume"
+  type: "about" | "projects" | "skills" | "contact" | "resume" | "achievements"
   onClose: () => void
 }
 
@@ -248,6 +249,45 @@ const panelContent = {
               <p className="text-xs text-[#8b6e50]">{exp.period}</p>
             </div>
           ))}
+        </div>
+      </div>
+    ),
+  },
+  achievements: {
+    title: "Achievements",
+    subtitle: "Sweet success!",
+    content: (
+      <div className="flex flex-col gap-5">
+        <div className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/60 hover:border-[#c87941] transition-all group">
+          <div className="flex items-start gap-4">
+            <div className="p-2 rounded-lg bg-[#c87941]/10 text-[#c87941]">
+              <Trophy className="w-6 h-6" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="text-[#e8a857] font-bold text-sm leading-tight">
+                IEEE SoutheastCon 2026 Research Publication
+              </h3>
+              <p className="text-[#d4c0a0] text-xs leading-relaxed italic">
+                Co-authored and presented "Comparative Risk Assessment of Vulnerable Road Users (VRUs) and Autonomous Vehicles (AVs) at Urban Intersections," contributing to the field of autonomous safety and urban mobility.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/60 hover:border-[#c87941] transition-all group">
+          <div className="flex items-start gap-4">
+            <div className="p-2 rounded-lg bg-[#c87941]/10 text-[#c87941]">
+              <Zap className="w-6 h-6" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="text-[#e8a857] font-bold text-sm leading-tight">
+                Hacktoberfest 2025 SuperContributor
+              </h3>
+              <p className="text-[#d4c0a0] text-xs leading-relaxed italic">
+                Awarded the official "SuperContributor" designation for successful open-source pull requests across global repositories; recognized for high-quality code contributions with an official community badge and environmental honors.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     ),
