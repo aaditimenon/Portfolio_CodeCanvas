@@ -61,55 +61,87 @@ const panelContent = {
     ),
   },
   projects: {
-    title: "My Projects",
-    subtitle: "Today's Specials",
+    title: "Research Projects",
+    subtitle: "Signals from the Radio",
     content: (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         {[
           {
-            name: "Project Espresso",
-            desc: "A full-stack e-commerce platform built with Next.js and Stripe",
-            tech: ["Next.js", "TypeScript", "Stripe"],
+            name: "1. Comparative Risk Assessment of VRUs and AVs",
+            overview: "Research project analyzing the comparative risk assessment of Vulnerable Road Users (VRUs) and Autonomous Vehicles (AVs) across urban intersections using advanced data analytics.",
+            desc: "This project focuses on developing a comprehensive framework for assessing and comparing risks between Vulnerable Road Users (VRUs) such as pedestrians and cyclists, and Autonomous Vehicles (AVs) at urban intersections. The study employs data-driven methodologies to analyze traffic patterns, collision scenarios, and safety metrics to improve urban transportation safety.",
+            features: [
+              "Risk assessment modeling for VRUs and AVs",
+              "Urban intersection data analysis",
+              "Statistical evaluation of safety metrics",
+              "Predicting modeling for accident prevention",
+              "Comparative analysis framework"
+            ],
+            tech: ["Python", "Data Analysis", "Machine Learning", "Statistical Modeling", "Research"],
+            github: "https://github.com/aaditimenon"
           },
           {
-            name: "Project Latte",
-            desc: "Real-time collaboration tool with WebSocket communication",
-            tech: ["React", "Node.js", "Socket.io"],
-          },
-          {
-            name: "Project Mocha",
-            desc: "AI-powered content management system with smart categorization",
-            tech: ["Python", "TensorFlow", "React"],
-          },
-          {
-            name: "Project Cappuccino",
-            desc: "Mobile-first social platform with geolocation features",
-            tech: ["React Native", "Firebase", "Maps API"],
-          },
+            name: "2. Context-Aware DDoS Detection for 5G V2X Networks",
+            overview: "Intelligent DDoS detection system designed specifically for 5G Vehicle-to-Everything (V2X) networks, leveraging context-aware mechanisms to enhance network security and reliability.",
+            desc: "This project presents a novel context-aware DDoS detection system tailored for 5G Vehicle-to-Everything (V2X) networks. As V2X communication becomes critical for autonomous driving and smart transportation, securing these networks against Distributed Denial of Service (DDoS) attacks is paramount.",
+            features: [
+              "Real-time traffic analysis and anomaly detection",
+              "Context-aware filtering mechanisms",
+              "Machine learning-based threat classification",
+              "5G network optimization for V2X communication",
+              "Automated response and mitigation strategies"
+            ],
+            tech: ["Python", "Machine Learning", "Network Security", "5G Networks", "V2X Communication", "Cybersecurity"],
+            github: "https://github.com/aaditimenon"
+          }
         ].map((project) => (
           <div
             key={project.name}
-            className="p-3 rounded-lg border border-[#4a2e1c] bg-[#2a1a10]/80 hover:border-[#c87941] transition-colors cursor-pointer group"
+            className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/80 hover:border-[#c87941] transition-all group"
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-[#e8a857] font-bold text-sm">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-[#e8a857] font-bold text-base">
                 {project.name}
               </h3>
-              <ExternalLink className="w-3.5 h-3.5 text-[#a68b6b] group-hover:text-[#c87941] transition-colors" />
             </div>
-            <p className="text-[#a68b6b] text-xs mt-1 leading-relaxed">
+            
+            <p className="text-[#f5e6d3] text-xs font-semibold mb-2">
+              {project.overview}
+            </p>
+            
+            <p className="text-[#a68b6b] text-xs leading-relaxed mb-3">
               {project.desc}
             </p>
-            <div className="flex gap-2 mt-2 flex-wrap">
+
+            <div className="flex flex-col gap-1 mb-4">
+              <p className="text-[10px] text-[#e8a857] uppercase font-bold tracking-wider">Key Features:</p>
+              {project.features.map(f => (
+                <p key={f} className="text-[10px] text-[#d4c0a0] flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-[#c87941]" /> {f}
+                </p>
+              ))}
+            </div>
+
+            <div className="flex gap-2 mb-4 flex-wrap">
               {project.tech.map((t) => (
                 <span
                   key={t}
-                  className="text-[10px] px-2 py-0.5 rounded-full bg-[#4a2e1c] text-[#c87941] border border-[#6b4226]"
+                  className="text-[9px] px-2 py-0.5 rounded-md bg-[#4a2e1c] text-[#c87941] border border-[#6b4226]"
                 >
                   {t}
                 </span>
               ))}
             </div>
+
+            <a 
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-xs text-[#c87941] hover:text-[#e8a857] transition-colors font-bold"
+            >
+              <Github className="w-4 h-4" />
+              View on GitHub →
+            </a>
           </div>
         ))}
       </div>

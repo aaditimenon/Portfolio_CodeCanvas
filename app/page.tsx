@@ -66,7 +66,7 @@ export default function CafePortfolio() {
           showInstructions={showInstructions}
           onDismissInstructions={handleDismissInstructions}
           discoveredCount={discovered.size}
-          totalCount={6}
+          totalCount={4}
         />
 
         <div className="flex flex-col gap-4">

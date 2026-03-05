@@ -203,6 +203,151 @@ function drawStandingChalkboard(
   px(ctx, x + 4, y + 13, 8, 0.5, "rgba(255,255,255,0.2)")
 }
 
+function drawBookstand(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Ornate Wooden Base
+  px(ctx, x + 2, y + 12, 12, 4, "#5a3520") // bottom base
+  px(ctx, x + 4, y + 4, 8, 8, "#6b4226") // central pillar
+  px(ctx, x + 1, y + 2, 14, 2, "#8b5e3c") // slanted top plate
+  
+  // Shading/Detail
+  px(ctx, x + 5, y + 5, 1, 6, "rgba(0,0,0,0.2)") // pillar shadow
+
+  // The Open Book
+  px(ctx, x + 2, y, 6, 4, "#ffffff") // Left page
+  px(ctx, x + 8, y, 6, 4, "#f5f5f5") // Right page
+  px(ctx, x + 7, y, 1, 4, "#d4c0a0") // Book spine/binding
+  
+  // Animated "Text" lines in book
+  px(ctx, x + 3, y + 1, 4, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 3, y + 2.5, 3, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 9, y + 1, 4, 0.5, "rgba(0,0,0,0.1)")
+  px(ctx, x + 9, y + 2.5, 4, 0.5, "rgba(0,0,0,0.1)")
+  
+  // Decorative Bookmark
+  px(ctx, x + 11, y - 1, 1, 3, "#d32f2f") 
+}
+
+function drawGrandBookshelf(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  const shelfW = 24
+  const shelfH = 30
+  
+  // Ornate Warm Wood Frame
+  px(ctx, x, y, shelfW, shelfH, "#3a1a05") // Outer frame
+  px(ctx, x + 1, y + 1, shelfW - 2, shelfH - 2, "#4a2815") // Interior
+  
+  // Shelves
+  for (let i = 1; i < 3; i++) {
+    px(ctx, x + 1, y + i * 10, shelfW - 2, 1, "#2a1005")
+  }
+
+  // Warm Colored Books - Static pattern to avoid flickering
+  const warmColors = [
+    "#8b0000", // Deep Red
+    "#b22222", // Firebrick
+    "#a0522d", // Sienna
+    "#d2691e", // Chocolate
+    "#cd853f", // Peru
+    "#deb887", // BurlyWood
+    "#f5deb3", // Wheat
+  ]
+  
+  const shelfPatterns = [
+    [3, 2, 4, 2, 3, 2], // shelf 1 book widths
+    [2, 3, 2, 4, 2, 3], // shelf 2 book widths
+    [4, 2, 3, 2, 4, 1], // shelf 3 book widths
+  ]
+  
+  for (let shelf = 0; shelf < 3; shelf++) {
+    const sy = y + 1 + shelf * 10
+    let curX = x + 2
+    const pattern = shelfPatterns[shelf]
+    
+    pattern.forEach((bW, i) => {
+      const bH = 6 + (i % 3) // Varied but static height
+      const color = warmColors[(shelf * 3 + i) % warmColors.length]
+      
+      // Draw book spine
+      px(ctx, curX, sy + (9 - bH), bW, bH, color)
+      // Spine detail
+      px(ctx, curX, sy + (9 - bH) + 1, bW, 0.5, "rgba(255,255,255,0.1)")
+      
+      curX += bW + 1
+    })
+  }
+
+  // Decorative topper
+  px(ctx, x - 1, y - 1, shelfW + 2, 2, "#3a1a05")
+}
+
+function drawRusticStool(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Rustic tripod-style stool
+  const legColor = "#3a1a05"
+  const seatColor = "#5a3520"
+  
+  // Legs
+  px(ctx, x + 1, y + 4, 1, 6, legColor) // back
+  px(ctx, x - 1, y + 5, 1, 6, legColor) // front left
+  px(ctx, x + 3, y + 5, 1, 6, legColor) // front right
+  px(ctx, x, y + 8, 3, 1, legColor) // crossbar
+  
+  // Thick wooden seat
+  px(ctx, x - 2, y + 2, 7, 2, seatColor)
+  px(ctx, x - 1, y + 1, 5, 1, "#6b4226") // top highlight
+}
+
+function drawVintageRadio(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Detailed 1950s style Table Radio
+  const bodyColor = "#8b4513"
+  const dialColor = "#ffe066"
+  const meshColor = "#d4c0a0"
+  
+  // Wood Body
+  px(ctx, x, y, 10, 7, bodyColor)
+  px(ctx, x + 1, y + 1, 8, 5, "#a0522d") // faceplate area
+  
+  // Speaker Mesh (left side)
+  px(ctx, x + 2, y + 2, 3, 3, meshColor)
+  for(let i=0; i<3; i++) px(ctx, x + 2 + i, y + 2, 0.5, 3, "rgba(0,0,0,0.2)") // mesh lines
+  
+  // Tuning Dials (right side)
+  px(ctx, x + 6, y + 2, 2, 2, dialColor) // large dial
+  px(ctx, x + 6.5, y + 2.5, 1, 1, "#1a0f0a") // dial center
+  px(ctx, x + 6, y + 4.5, 1, 1, "#111") // small knob 1
+  px(ctx, x + 7.5, y + 4.5, 1, 1, "#111") // small knob 2
+  
+  // Antenna
+  ctx.strokeStyle = "#555"
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo((x + 8) * PIXEL, y * PIXEL)
+  ctx.lineTo((x + 12) * PIXEL, (y - 5) * PIXEL)
+  ctx.stroke()
+}
+
+function drawMonstera(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Terracotta Pot
+  px(ctx, x + 2, y + 14, 6, 4, "#cd5c5c") // pot body
+  px(ctx, x + 1, y + 14, 8, 1, "#e9967a") // rim
+  
+  // Monstera Leaves (Large, holey silhouette)
+  const darkG = "#1a3c1a"
+  const midG = "#2d5a27"
+  
+  // Stem structure
+  px(ctx, x + 4, y + 8, 1, 6, darkG)
+  px(ctx, x + 5, y + 6, 1, 8, darkG)
+  
+  // Large Leaves
+  px(ctx, x - 2, y + 2, 5, 6, midG) // Leaf 1
+  px(ctx, x - 1, y + 3, 1, 1, "#1a0f0a") // Monstera hole
+  
+  px(ctx, x + 6, y, 6, 7, darkG) // Leaf 2
+  px(ctx, x + 8, y + 2, 1, 2, "#1a0f0a") // Monstera hole
+  
+  px(ctx, x - 4, y + 8, 6, 5, darkG) // Leaf 3
+  px(ctx, x + 8, y + 7, 5, 6, midG) // Leaf 4
+}
+
 function drawEspressoMachine(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -516,36 +661,20 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
 
   return [
     {
-      x: 24,
-      y: 16,
-      width: 40,
-      height: 60,
-      label: "Bookshelf - Skills",
-      type: "skills",
+      x: 12,
+      y: 100,
+      width: 14,
+      height: 25,
+      label: "Radio - Projects",
+      type: "projects",
     },
     {
       x: 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2) - 17,
       y: 18,
       width: 34,
-      height: 60,
+      height: 80,
       label: "Chalkboard - Education",
       type: "education",
-    },
-    {
-      x: 5,
-      y: 18,
-      width: 16,
-      height: 60,
-      label: "Window - Contact",
-      type: "contact",
-    },
-    {
-      x: pw - 22,
-      y: 18,
-      width: 16,
-      height: 60,
-      label: "Window - Welcome",
-      type: "about",
     },
     {
       x: 5 + Math.floor(bcW * 0.5),
@@ -705,11 +834,16 @@ export function renderCafe(
   const bcW = Math.floor(pw * 0.45)
   const pcW = Math.floor(pw * 0.30)
   const pcX = pw - pcW - 5
-
   const gapMid = 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2)
   
   // Menu Board (Acts as Education interaction point)
   drawChalkboard(ctx, gapMid - 17, 18, "MENU", ["Today's Special", "Latte", "Donut"])
+
+  // Grand Bookshelf (Projects) - Positioned below the Menu Board
+  drawGrandBookshelf(ctx, gapMid - 12, 44)
+  
+  // Large Floor Monstera - Beside the bookshelf
+  drawMonstera(ctx, gapMid - 28, 55)
 
   // Billing Counter (Left, 45%)
   drawCounter(ctx, 5, bcW)
@@ -736,6 +870,10 @@ export function renderCafe(
 
   // Floor
   drawFloor(ctx, pw, ph, 82)
+
+  // Vintage Radio on Stool (Projects Station) - Moved right and down for visibility
+  drawRusticStool(ctx, 16, 100)
+  drawVintageRadio(ctx, 14, 93)
 
   // Scattered Aesthetic Tables (8 tables)
   const tablePositions = [
