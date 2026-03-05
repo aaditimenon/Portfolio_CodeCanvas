@@ -380,6 +380,193 @@ function drawMonstera(ctx: CanvasRenderingContext2D, x: number, y: number) {
   px(ctx, x + 2, y + 7, 2, 3, lightG)
 }
 
+function drawGrandPiano(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  const ebony = "#0a0a0a"
+  const highlight = "#2a2a2a"
+  const gold = "#d4af37" // For strings/interior
+  const keys = "#ffffff"
+
+  // 1. Piano Body - Curved "Harpsichord" shape
+  // Main rectangular section
+  px(ctx, x + 4, y, 22, 8, ebony)
+  px(ctx, x + 4, y, 22, 1, highlight) // Top edge highlight
+  
+  // The iconic curve (Right side)
+  px(ctx, x + 26, y + 1, 4, 6, ebony)
+  px(ctx, x + 30, y + 2, 3, 4, ebony)
+  px(ctx, x + 33, y + 3, 2, 2, ebony)
+
+  // 2. Keyboard (Left side, facing the radio)
+  // Keybed block
+  px(ctx, x, y + 1, 4, 6, ebony)
+  px(ctx, x, y + 1, 1, 6, highlight) // Left edge highlight
+  
+  // The Keys (Side profile)
+  px(ctx, x - 2, y + 2, 3, 4, keys)
+  for (let i = 0; i < 3; i++) {
+    px(ctx, x - 1, y + 2.5 + i * 1.5, 2, 0.5, "#000") // Black keys
+  }
+
+  // 3. Propped Lid & Interior
+  // Golden interior (strings) visible under the propped lid
+  px(ctx, x + 6, y + 1, 18, 5, "#3a2510") // Dark interior
+  for (let i = 0; i < 15; i += 2) {
+    px(ctx, x + 7 + i, y + 2, 1, 3, gold) // Suggestion of strings
+  }
+
+  // The Lid (Propped up high)
+  for (let i = 0; i < 12; i++) {
+    const lx = x + 5 + i * 1.8
+    const ly = y - 2 - i * 1.2
+    px(ctx, lx, ly, 4, 1.5, ebony)
+    px(ctx, lx, ly, 4, 0.5, highlight)
+  }
+  
+  // Support stick
+  px(ctx, x + 20, y - 10, 0.5, 12, gold)
+
+  // 4. Legs (Three points of contact)
+  px(ctx, x + 4, y + 8, 1.5, 8, ebony)    // Front left
+  px(ctx, x + 22, y + 8, 1.5, 8, ebony)   // Front right
+  px(ctx, x + 32, y + 5, 1, 6, ebony)     // Tail leg
+
+  // 5. Piano Bench
+  const bx = x - 9
+  const by = y + 2
+  px(ctx, bx, by, 4, 4, "#3d2b1f") // Cushion
+  px(ctx, bx, by + 4, 1, 3, ebony) // Leg
+  px(ctx, bx + 3, by + 4, 1, 3, ebony) // Leg
+}
+
+function drawRugWithSleepingCat(ctx: CanvasRenderingContext2D, x: number, y: number, time: number, catInteractionTime: number) {
+  // Deep Teal Aesthetic Rug
+  const rugColor = "#1a3a3a"
+  const patternColor = "#2a5a5a"
+  
+  px(ctx, x, y, 28, 16, rugColor)
+  px(ctx, x + 2, y + 2, 24, 12, patternColor)
+
+  const catBody = "#f5d5a5"
+  const isInteracting = time - catInteractionTime < 2000
+  // Each time the user interacts, a different reaction (0-4) is selected
+  const reaction = Math.floor(catInteractionTime % 5)
+
+  // 1. Cat Body (Default position)
+  px(ctx, x + 10, y + 6, 8, 5, catBody)
+  px(ctx, x + 11, y + 6, 3, 3, "#d32f2f") // Orange spot
+  px(ctx, x + 15, y + 7, 2, 2, "#2a2a2a") // Black spot
+  
+  // 2. Head & Features
+  const hx = x + 8
+  // Reaction 0: Head Lift
+  const hy = (isInteracting && reaction === 0) ? y + 4 : y + 6 
+  px(ctx, hx, hy, 5, 4, catBody)
+  
+  // Reaction 1: Ear Twitching
+  const earOffset = (isInteracting && reaction === 1) ? Math.sin(time * 0.03) * 1.5 : 0
+  px(ctx, hx, hy, 1, 1 + earOffset, "#3a1a05") 
+  px(ctx, hx + 4, hy, 1, 1 + earOffset, "#3a1a05") 
+  
+  // Reaction 3: Animated Eyes (Squint/Open)
+  if (isInteracting && reaction === 3) {
+    const blink = Math.floor(time / 200) % 2 === 0
+    if (blink) {
+      px(ctx, hx + 1, hy + 2, 1, 1, "#000") // Eyes open
+      px(ctx, hx + 3, hy + 2, 1, 1, "#000")
+    } else {
+      px(ctx, hx + 1, hy + 2, 1, 0.5, "#000") // Squint
+      px(ctx, hx + 3, hy + 2, 1, 0.5, "#000")
+    }
+  } else {
+    // Normal sleeping eyes
+    px(ctx, hx + 1, hy + 2, 1, 0.5, "#000")
+    px(ctx, hx + 3, hy + 2, 1, 0.5, "#000")
+  }
+  
+  px(ctx, hx + 2, hy + 3, 1, 0.5, "#ff8080") // Nose
+
+  // Reaction 2: Tail Wagging
+  const tailWag = (isInteracting && reaction === 2) ? Math.sin(time * 0.02) * 4 : 0
+  px(ctx, x + 18, y + 8 + tailWag, 2, 4, catBody)
+  px(ctx, x + 14 + tailWag, y + 11, 5, 1, catBody)
+
+  // Heart FX (Always show when interacting - Enlarged for visibility)
+  if (isInteracting) {
+    const fxY = y - 12 - Math.abs(Math.sin(time * 0.006) * 10)
+    const fxX = x + 10
+    
+    // Vibrant Red Hearts with "shimmer"
+    const heartColor = (Math.floor(time / 100) % 2 === 0) ? "#ff4040" : "#ff0000"
+    
+    // Main Heart
+    px(ctx, fxX - 2, fxY, 2, 2, heartColor)
+    px(ctx, fxX + 2, fxY, 2, 2, heartColor)
+    px(ctx, fxX, fxY + 2, 2, 2, heartColor)
+    px(ctx, fxX - 1, fxY + 1, 4, 2, heartColor)
+    
+    // Side Heart 1 (Mini)
+    px(ctx, fxX - 8, fxY + 4 + Math.sin(time * 0.01) * 2, 2, 2, "#ff8080")
+    
+    // Side Heart 2 (Mini)
+    px(ctx, fxX + 10, fxY + 2 + Math.cos(time * 0.01) * 2, 2, 2, "#ffb3b3")
+  }
+}
+
+function drawPlayingPup(ctx: CanvasRenderingContext2D, baseX: number, baseY: number, time: number, variant: "golden" | "spotty") {
+  // Roaming logic: Move in a small figure-eight or oval
+  const offsetX = Math.sin(time * 0.001) * 15
+  const offsetY = Math.cos(time * 0.0015) * 5
+  const x = baseX + offsetX
+  const y = baseY + offsetY
+
+  const jump = Math.abs(Math.sin(time * 0.005)) * 3
+  const wag = Math.sin(time * 0.02) * 2
+  
+  const bodyColor = variant === "golden" ? "#e8a857" : "#ffffff"
+  const spotColor = "#3d2b1f"
+
+  // Body
+  px(ctx, x, y - jump, 6, 4, bodyColor)
+  if (variant === "spotty") {
+    px(ctx, x + 1, y + 1 - jump, 2, 2, spotColor)
+    px(ctx, x + 4, y + 2 - jump, 1, 1, spotColor)
+  }
+
+  // Head with features
+  px(ctx, x + 4, y - 3 - jump, 5, 5, bodyColor)
+  px(ctx, x + 8, y - 1 - jump, 1, 1, "#000") // Nose
+  px(ctx, x + 5, y - 1 - jump, 0.5, 0.5, "#000") // Eye 1
+  px(ctx, x + 7, y - 1 - jump, 0.5, 0.5, "#000") // Eye 2
+  
+  // Ears
+  const earColor = variant === "golden" ? "#c87941" : "#5a3520"
+  px(ctx, x + 4, y - 4 - jump, 1.5, 2, earColor) // Flappy ear 1
+  px(ctx, x + 7.5, y - 4 - jump, 1.5, 2, earColor) // Flappy ear 2
+
+  // Tail (Wagging)
+  px(ctx, x - 2, y + 1 - jump + (wag > 0 ? 0 : 1), 2, 1, bodyColor)
+
+  // Legs
+  px(ctx, x, y + 4 - (jump > 1 ? 1 : 0), 1, 2, bodyColor)
+  px(ctx, x + 5, y + 4 - (jump > 1 ? 1 : 0), 1, 2, bodyColor)
+}
+
+function drawPetBowl(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  const bowlColor = "#5a6a6a" // Steel blue/grey
+  const foodColor = "#8b5e3c" // Kibble brown
+  const waterColor = "#4facfe" // Bright water blue
+
+  // Food Bowl
+  px(ctx, x, y, 6, 3, bowlColor)
+  px(ctx, x + 1, y + 1, 4, 1, foodColor)
+  px(ctx, x, y, 6, 0.5, "rgba(255,255,255,0.2)") // Shine
+
+  // Water Bowl
+  px(ctx, x + 8, y, 6, 3, bowlColor)
+  px(ctx, x + 9, y + 1, 4, 1, waterColor)
+  px(ctx, x + 8, y, 6, 0.5, "rgba(255,255,255,0.2)") // Shine
+}
+
 function drawWallPhone(ctx: CanvasRenderingContext2D, x: number, y: number) {
   // Vintage Wall-mounted Rotary Phone
   const bodyColor = "#2a2a2a"
@@ -711,6 +898,7 @@ export interface InteractiveZone {
     | "resume"
     | "achievements"
     | "education"
+    | "cat"
 }
 
 export function getInteractiveZones(canvasW: number): InteractiveZone[] {
@@ -726,6 +914,7 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
   const shelfWidth = 24
   const spacing = Math.max(2, Math.floor((totalGapWidth - (plantWidth + shelfWidth)) / 3))
   const shelfX = gapStart + spacing + plantWidth + spacing
+  const gapMid = gapStart + Math.floor(totalGapWidth / 2)
 
   return [
     {
@@ -735,6 +924,14 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       height: 25,
       label: "Radio - Projects",
       type: "projects",
+    },
+    {
+      x: Math.floor(pw * 0.88),
+      y: 105,
+      width: 24,
+      height: 20,
+      label: "Piano - Skills & Experience",
+      type: "skills",
     },
     {
       x: shelfX - 12,
@@ -759,6 +956,14 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       height: 40, // Increased height to bring interaction center closer to player path
       label: "Phone - Contact Me",
       type: "contact",
+    },
+    {
+      x: gapMid - 10,
+      y: 135,
+      width: 28,
+      height: 16,
+      label: "Cat - Pat Me!",
+      type: "cat",
     },
     {
       x: pw - pcW - 5,
@@ -888,7 +1093,8 @@ export function renderCafe(
   time: number,
   playerX: number,
   playerY: number,
-  nearZone: InteractiveZone | null
+  nearZone: InteractiveZone | null,
+  catInteractionTime: number = 0
 ) {
   const pw = Math.floor(canvasWidth / PIXEL)
   const ph = Math.floor(canvasHeight / PIXEL)
@@ -926,6 +1132,7 @@ export function renderCafe(
   
   const plantX = gapStart + spacing + 5 // +5 because drawMonstera uses x as a center-ish point
   const shelfX = gapStart + spacing + plantWidth + spacing
+  const gapMid = gapStart + Math.floor(totalGapWidth / 2)
   
   // Menu Board (Shifted left for better visibility and access)
   drawChalkboard(ctx, shelfX - 12, 18, "MENU", ["Today's Special", "Latte", "Donut"])
@@ -972,19 +1179,23 @@ export function renderCafe(
   drawRusticStool(ctx, 16, 100)
   drawVintageRadio(ctx, 14, 93)
 
-  // Scattered Aesthetic Tables (8 tables)
+  // Vintage Grand Piano (Skills/Experience) - Shifted further right and flipped perspective
+  drawGrandPiano(ctx, Math.floor(pw * 0.88), 105)
+
+  // Aesthetic Rug with Sleeping Cat (Positioned further down past the tables)
+  drawRugWithSleepingCat(ctx, gapMid - 10, 135, time, catInteractionTime)
+
+  // Scattered Aesthetic Tables (7 tables scattered uniformly)
   const tablePositions = [
-    // Top staggered row
-    { x: Math.floor(pw * 0.15), y: 92 },
-    { x: Math.floor(pw * 0.5) - 7, y: 90 },
-    { x: Math.floor(pw * 0.85) - 14, y: 92 },
-    // Middle staggered row
-    { x: Math.floor(pw * 0.3), y: 108 },
-    { x: Math.floor(pw * 0.7) - 7, y: 108 },
-    // Bottom staggered row
-    { x: Math.floor(pw * 0.1), y: 124 },
-    { x: Math.floor(pw * 0.5) - 7, y: 126 },
-    { x: Math.floor(pw * 0.9) - 14, y: 124 },
+    // Top Row
+    { x: Math.floor(pw * 0.1), y: 92 },
+    { x: Math.floor(pw * 0.3), y: 90 },
+    { x: Math.floor(pw * 0.5), y: 92 },
+    { x: Math.floor(pw * 0.7), y: 90 },
+    // Bottom Row
+    { x: Math.floor(pw * 0.2), y: 120 },
+    { x: Math.floor(pw * 0.45), y: 124 },
+    { x: Math.floor(pw * 0.75), y: 120 },
   ]
 
   tablePositions.forEach((pos) => {

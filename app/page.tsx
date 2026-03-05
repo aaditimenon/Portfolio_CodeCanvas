@@ -13,13 +13,24 @@ type PanelType =
   | "resume"
   | "achievements"
   | "education"
+  | "cat"
 
 export default function CafePortfolio() {
   const [showInstructions, setShowInstructions] = useState(true)
   const [activePanel, setActivePanel] = useState<PanelType | null>(null)
   const [discovered, setDiscovered] = useState<Set<PanelType>>(new Set())
+  const [catInteractionTime, setCatInteractionTime] = useState(0)
 
   const handleInteract = useCallback((type: PanelType) => {
+    if (type === "cat") {
+      setCatInteractionTime(performance.now())
+      setDiscovered((prev) => {
+        const next = new Set(prev)
+        next.add("cat")
+        return next
+      })
+      return
+    }
     setActivePanel(type)
     setDiscovered((prev) => {
       const next = new Set(prev)
@@ -59,14 +70,14 @@ export default function CafePortfolio() {
         }}
       />
 
-      <GameCanvas onInteract={handleInteract} />
+      <GameCanvas onInteract={handleInteract} catInteractionTime={catInteractionTime} />
 
       <div className="relative z-10 w-full h-full pointer-events-none flex flex-col justify-between p-4">
         <GameHUD
           showInstructions={showInstructions}
           onDismissInstructions={handleDismissInstructions}
           discoveredCount={discovered.size}
-          totalCount={4}
+          totalCount={6}
         />
 
         <div className="flex flex-col gap-4">
