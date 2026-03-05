@@ -23,9 +23,7 @@ export default function GameCanvas({ onInteract }: GameCanvasProps) {
   // Handle resize
   useEffect(() => {
     function handleResize() {
-      const w = Math.min(window.innerWidth - 16, 1200)
-      const h = Math.min(window.innerHeight - 120, 500)
-      setCanvasSize({ w, h })
+      setCanvasSize({ w: window.innerWidth, h: window.innerHeight })
     }
     handleResize()
     window.addEventListener("resize", handleResize)
@@ -165,12 +163,10 @@ export default function GameCanvas({ onInteract }: GameCanvasProps) {
       ref={canvasRef}
       width={canvasSize.w}
       height={canvasSize.h}
-      className="block mx-auto rounded-lg border-2 border-[#4a2e1c] cursor-crosshair"
+      className="fixed inset-0 w-full h-full cursor-crosshair outline-none"
       style={{
         imageRendering: "pixelated",
-        maxWidth: "100%",
-        boxShadow:
-          "0 0 40px rgba(200, 121, 65, 0.2), inset 0 0 20px rgba(0,0,0,0.3)",
+        boxShadow: "inset 0 0 100px rgba(0,0,0,0.5)",
       }}
       onClick={handleCanvasTouch}
       onTouchStart={handleCanvasTouch}

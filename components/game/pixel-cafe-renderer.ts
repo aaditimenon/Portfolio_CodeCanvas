@@ -138,26 +138,69 @@ function drawShelfUnit(ctx: CanvasRenderingContext2D, x: number, y: number) {
   }
 }
 
-function drawChalkboard(ctx: CanvasRenderingContext2D, x: number, y: number) {
+function drawChalkboard(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  title: string,
+  items: string[]
+) {
+  // Enhanced frame with ornate corners
   px(ctx, x - 1, y - 1, 36, 22, C.boardFrame)
   px(ctx, x, y, 34, 20, C.boardBg)
-  // Coffee cup icon
-  px(ctx, x + 13, y + 2, 8, 6, "#e0d0b0")
-  px(ctx, x + 14, y + 3, 6, 4, C.boardBg)
-  px(ctx, x + 21, y + 3, 2, 3, "#e0d0b0")
-  // Steam
-  px(ctx, x + 15, y + 1, 1, 1, "#a0a080")
-  px(ctx, x + 17, y + 0, 1, 1, "#a0a080")
-  px(ctx, x + 19, y + 1, 1, 1, "#a0a080")
-  // "COFFEE" text
-  for (let i = 0; i < 6; i++) {
-    px(ctx, x + 8 + i * 3, y + 10, 2, 3, C.boardText)
-  }
-  // Menu lines
-  for (let i = 0; i < 3; i++) {
-    px(ctx, x + 4, y + 15 + i * 2, 12, 1, "#7a8a70")
-    px(ctx, x + 20, y + 15 + i * 2, 6, 1, "#7a8a70")
-  }
+
+  // Chalk dust effect on bottom
+  ctx.fillStyle = "rgba(255, 255, 255, 0.05)"
+  ctx.fillRect(x * PIXEL, (y + 18) * PIXEL, 34 * PIXEL, 2 * PIXEL)
+
+  // Title
+  ctx.fillStyle = C.boardText
+  ctx.font = `bold ${2.5 * PIXEL}px sans-serif`
+  ctx.textAlign = "center"
+  ctx.fillText(title, (x + 17) * PIXEL, (y + 5) * PIXEL)
+
+  px(ctx, x + 10, y + 6, 14, 1, "#7a8a70") // Underline
+
+  // Menu items
+  items.forEach((item, i) => {
+    const iy = y + 10 + i * 4
+    const isHeader = i === 0 && item.includes("Special")
+    
+    if (!isHeader) {
+      px(ctx, x + 4, iy, 1, 1, "#e8d5b8") // Bullet
+    }
+    
+    ctx.fillStyle = isHeader ? "#e8d5b8" : "#a0a080"
+    ctx.font = `${(isHeader ? 2.2 : 2) * PIXEL}px sans-serif`
+    ctx.textAlign = "left"
+    ctx.fillText(item, (isHeader ? x + 4 : x + 7) * PIXEL, (iy + 1) * PIXEL)
+  })
+}
+
+function drawStandingChalkboard(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  title: string
+) {
+  // A-frame legs
+  px(ctx, x + 2, y + 15, 2, 5, C.boardFrame) // Left leg
+  px(ctx, x + 16, y + 15, 2, 5, C.boardFrame) // Right leg
+
+  // Main board frame
+  px(ctx, x, y, 20, 16, C.boardFrame)
+  px(ctx, x + 1, y + 1, 18, 14, C.boardBg)
+
+  // Title
+  ctx.fillStyle = C.boardText
+  ctx.font = `bold ${1.8 * PIXEL}px sans-serif`
+  ctx.textAlign = "center"
+  ctx.fillText(title, (x + 10) * PIXEL, (y + 6) * PIXEL)
+
+  // Scribbles
+  px(ctx, x + 4, y + 9, 12, 0.5, "rgba(255,255,255,0.2)")
+  px(ctx, x + 4, y + 11, 10, 0.5, "rgba(255,255,255,0.2)")
+  px(ctx, x + 4, y + 13, 8, 0.5, "rgba(255,255,255,0.2)")
 }
 
 function drawEspressoMachine(
@@ -322,10 +365,24 @@ function drawBarStool(ctx: CanvasRenderingContext2D, x: number, y: number) {
 }
 
 function drawTable(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  // Exquisite Table legs with shading
+  px(ctx, x + 2, y + 2, 1, 8, C.tableLeg)
+  px(ctx, x + 11, y + 2, 1, 8, C.tableLeg)
+  px(ctx, x + 3, y + 2, 1, 6, "rgba(0,0,0,0.1)")
+
+  // Table top base
   px(ctx, x, y, 14, 2, C.tableTop)
-  px(ctx, x + 1, y - 1, 12, 1, "#dab888")
-  px(ctx, x + 1, y + 2, 2, 8, C.tableLeg)
-  px(ctx, x + 11, y + 2, 2, 8, C.tableLeg)
+
+  // Aesthetic Tablecloth
+  px(ctx, x - 1, y - 1, 16, 1, "#ffffff") // Main top
+  px(ctx, x, y, 14, 1, "#f5f5f5") // Edge
+  px(ctx, x - 1, y, 1, 4, "#ffffff") // Left hang
+  px(ctx, x + 14, y, 1, 4, "#ffffff") // Right hang
+  px(ctx, x + 2, y + 1, 10, 3, "rgba(255,255,255,0.8)") // Center hang
+  
+  // Table decoration (small flower/candle)
+  px(ctx, x + 6, y - 3, 2, 2, "#e8d5b8") // base
+  px(ctx, x + 6, y - 4, 2, 1, "#ff4040") // flower
 }
 
 function drawChair(
@@ -334,14 +391,25 @@ function drawChair(
   y: number,
   facing: "left" | "right"
 ) {
-  px(ctx, x, y, 5, 2, C.chairSeat)
+  // Exquisite frame with gold trim
+  const frameColor = "#d4af37" // Gold
+  const cushionColor = "#8b0000" // Deep red velvet
+
+  // Cushion
+  px(ctx, x, y, 5, 2, cushionColor)
+  px(ctx, x + 1, y + 1, 3, 1, "rgba(255,255,255,0.1)") // highlight
+
   if (facing === "left") {
-    px(ctx, x, y - 4, 1, 4, C.chairLeg)
-    px(ctx, x, y - 5, 3, 1, C.chairLeg)
+    px(ctx, x, y - 6, 1, 6, frameColor) // Back post
+    px(ctx, x, y - 7, 4, 1, frameColor) // Top rail
+    px(ctx, x + 1, y - 4, 2, 1, "#a0724a") // Wood slat
   } else {
-    px(ctx, x + 4, y - 4, 1, 4, C.chairLeg)
-    px(ctx, x + 2, y - 5, 3, 1, C.chairLeg)
+    px(ctx, x + 4, y - 6, 1, 6, frameColor) // Back post
+    px(ctx, x + 1, y - 7, 4, 1, frameColor) // Top rail
+    px(ctx, x + 2, y - 4, 2, 1, "#a0724a") // Wood slat
   }
+
+  // Legs
   px(ctx, x, y + 2, 1, 5, C.chairLeg)
   px(ctx, x + 4, y + 2, 1, 5, C.chairLeg)
 }
@@ -354,16 +422,21 @@ function drawBarista(
 ) {
   const bob = Math.floor(Math.sin(time * 0.003) * 0.5)
   const by = y + bob
-  px(ctx, x + 1, by + 4, 6, 8, "#e8d5b8")
-  px(ctx, x + 1, by + 6, 6, 6, C.baristaApron)
-  px(ctx, x + 2, by + 5, 4, 1, C.baristaApron)
-  px(ctx, x + 2, by, 4, 4, C.baristaSkin)
-  px(ctx, x + 2, by - 1, 4, 2, C.baristaHair)
-  px(ctx, x + 5, by, 2, 2, C.baristaHair)
-  px(ctx, x + 3, by + 1, 1, 1, "#2a1a10")
-  px(ctx, x + 5, by + 1, 1, 1, "#2a1a10")
-  px(ctx, x - 1, by + 5, 2, 5, C.baristaSkin)
-  px(ctx, x + 7, by + 5, 2, 5, C.baristaSkin)
+  
+  // Standardized Barista (9x16 units)
+  px(ctx, x + 1, by + 4, 7, 12, "#e8d5b8") // shirt
+  px(ctx, x + 1, by + 6, 7, 10, C.baristaApron) // apron
+  px(ctx, x + 2, by + 5, 5, 1, C.baristaApron) // strap
+  
+  px(ctx, x + 2.5, by, 4, 4, C.baristaSkin) // face
+  px(ctx, x + 2, by - 1, 5, 2, C.baristaHair) // hair top
+  px(ctx, x + 6, by, 2, 3, C.baristaHair) // hair side
+  
+  px(ctx, x + 3.5, by + 1.5, 1, 1, "#2a1a10") // eye
+  px(ctx, x + 5.5, by + 1.5, 1, 1, "#2a1a10") // eye
+  
+  px(ctx, x - 0.5, by + 6, 2, 6, C.baristaSkin) // arm left
+  px(ctx, x + 7.5, by + 6, 2, 6, C.baristaSkin) // arm right
 }
 
 function drawWindow(ctx: CanvasRenderingContext2D, x: number, y: number) {
@@ -425,36 +498,44 @@ export interface InteractiveZone {
   width: number
   height: number
   label: string
-  type: "about" | "projects" | "skills" | "contact" | "resume" | "achievements"
+  type:
+    | "about"
+    | "projects"
+    | "skills"
+    | "contact"
+    | "resume"
+    | "achievements"
+    | "education"
 }
 
 export function getInteractiveZones(canvasW: number): InteractiveZone[] {
   const pw = Math.floor(canvasW / PIXEL)
   const bcW = Math.floor(pw * 0.45)
   const pcW = Math.floor(pw * 0.30)
-  
+  const pcX = pw - pcW - 5
+
   return [
     {
       x: 24,
       y: 16,
       width: 40,
-      height: 30,
+      height: 60,
       label: "Bookshelf - Skills",
       type: "skills",
     },
     {
-      x: Math.floor(pw / 2) - 17,
+      x: 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2) - 17,
       y: 18,
       width: 34,
-      height: 20,
-      label: "Menu Board - Projects",
-      type: "projects",
+      height: 60,
+      label: "Chalkboard - Education",
+      type: "education",
     },
     {
       x: 5,
       y: 18,
       width: 16,
-      height: 24,
+      height: 60,
       label: "Window - Contact",
       type: "contact",
     },
@@ -462,8 +543,8 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       x: pw - 22,
       y: 18,
       width: 16,
-      height: 24,
-      label: "Window - About Me",
+      height: 60,
+      label: "Window - Welcome",
       type: "about",
     },
     {
@@ -471,7 +552,7 @@ export function getInteractiveZones(canvasW: number): InteractiveZone[] {
       y: 46,
       width: 8,
       height: 14,
-      label: "Barista - Resume",
+      label: "Barista - About Me",
       type: "resume",
     },
     {
@@ -533,61 +614,53 @@ function drawPlayer(
   const legOffset = (walkFrame % 2) * 1.5
   const bob = Math.sin(time * 0.01) * 1
 
-  // Shadow (Wide for chubby sprite)
+  // Shadow
   ctx.fillStyle = "rgba(0,0,0,0.1)"
   ctx.beginPath()
   ctx.ellipse(
-    (x + 4) * PIXEL,
+    (x + 4.5) * PIXEL,
     (y + 15) * PIXEL,
-    7 * PIXEL,
-    2.5 * PIXEL,
+    6 * PIXEL,
+    2 * PIXEL,
     0,
     0,
     Math.PI * 2
   )
   ctx.fill()
 
-  // Long Flowy Brown Hair (Back Layer)
-  px(ctx, x + 0.5, y + 2 + bob, 8, 11, "#5d4037")
-  px(ctx, x - 0.5, y + 5 + bob, 1.5, 6, "#5d4037") // Extra flowy bits
-  px(ctx, x + 8, y + 5 + bob, 1.5, 6, "#5d4037")
-
-  // Bare Legs (Skin tone, slightly wider)
-  px(ctx, x + 2.5, y + 10 + legOffset, 2.5, 5, "#e0b090") // Left
-  px(ctx, x + 4.5, y + 10 - legOffset + 1.5, 2.5, 5, "#e0b090") // Right
+  // Standardized Player (9x16 units)
+  // Hair (Back)
+  px(ctx, x + 0.5, y + 2 + bob, 8, 10, "#5d4037")
   
-  // Cute Red Shoes
-  px(ctx, x + 2.5, y + 14.5 + legOffset, 2.5, 1, "#d32f2f")
-  px(ctx, x + 4.5, y + 14.5 - legOffset + 1.5, 2.5, 1, "#d32f2f")
+  // Legs
+  px(ctx, x + 2.5, y + 10 + legOffset, 2, 5, "#e0b090") 
+  px(ctx, x + 5, y + 10 - legOffset, 2, 5, "#e0b090") 
+  
+  // Shoes
+  px(ctx, x + 2.5, y + 14.5 + legOffset, 2, 1, "#d32f2f")
+  px(ctx, x + 5, y + 14.5 - legOffset, 2, 1, "#d32f2f")
 
-  // Red Dress (Chubby/Rounded silhouette)
-  px(ctx, x + 1, y + 4 + bob, 7, 7, "#d32f2f") // Dress body
-  px(ctx, x + 0.5, y + 6 + bob, 8, 5, "#b71c1c") // Bottom flare/shading
-  px(ctx, x + 2.5, y + 3.5 + bob, 4, 1, "#ff8a80") // Ribbon/detail
+  // Dress
+  px(ctx, x + 1, y + 4 + bob, 7, 7, "#d32f2f") 
+  px(ctx, x + 0.5, y + 6 + bob, 8, 5, "#b71c1c") 
 
-  // Arms (Bare skin)
-  px(ctx, x - 0.5, y + 5 + bob, 1.5, 5, "#e0b090") // Left
-  px(ctx, x + 8, y + 5 + bob, 1.5, 5, "#e0b090") // Right
+  // Arms
+  px(ctx, x - 0.5, y + 5 + bob, 1.5, 5, "#e0b090") 
+  px(ctx, x + 8, y + 5 + bob, 1.5, 5, "#e0b090") 
 
   // Head
-  px(ctx, x + 2.5, y - 1 + bob, 4.5, 5, "#e0b090") // Face
+  px(ctx, x + 2.5, y - 1 + bob, 4.5, 5, "#e0b090") 
   
-  // Face Details
-  px(ctx, x + 3, y + 2 + bob, 1, 1, "#111") // Left Eye
-  px(ctx, x + 5.5, y + 2 + bob, 1, 1, "#111") // Right Eye
-  px(ctx, x + 2.5, y + 3 + bob, 1, 0.8, "#ff8a80") // Left Blush
-  px(ctx, x + 6, y + 3 + bob, 1, 0.8, "#ff8a80") // Right Blush
-  px(ctx, x + 4, y + 3.5 + bob, 2, 0.5, "#8b5e3c") // Smile
+  // Face
+  px(ctx, x + 3.5, y + 1.5 + bob, 1, 1, "#111") 
+  px(ctx, x + 5.5, y + 1.5 + bob, 1, 1, "#111") 
+  px(ctx, x + 3, y + 3 + bob, 1, 1, "#ff8a80") 
+  px(ctx, x + 6, y + 3 + bob, 1, 1, "#ff8a80") 
 
-  // Cute Hat (Straw/Summer style with red band)
-  px(ctx, x + 1.5, y - 3 + bob, 6, 2, "#f5d5a5") // Hat top
-  px(ctx, x + 0.5, y - 1.5 + bob, 8, 1.5, "#f5d5a5") // Hat brim
-  px(ctx, x + 1.5, y - 1.5 + bob, 6, 0.8, "#d32f2f") // Hat band
-  
-  // Hair (Front bangs/framing)
-  px(ctx, x + 2, y - 1 + bob, 5, 2, "#5d4037")
-  px(ctx, x + 1.5, y + 1 + bob, 1, 5, "#5d4037")
-  px(ctx, x + 7, y + 1 + bob, 1, 5, "#5d4037")
+  // Hat
+  px(ctx, x + 1.5, y - 3 + bob, 6, 2, "#f5d5a5") 
+  px(ctx, x + 0.5, y - 1.5 + bob, 8, 1.5, "#f5d5a5") 
+  px(ctx, x + 1.5, y - 1.5 + bob, 6, 0.8, "#d32f2f") 
 }
 
 function drawFloralPlatform(
@@ -629,13 +702,15 @@ export function renderCafe(
   drawPlant(ctx, 22, 38)
   drawPlant(ctx, pw - 26, 30)
 
-  const boardX = Math.floor(pw / 2) - 17
-  drawChalkboard(ctx, boardX, 18)
-
-  // Counter area
   const bcW = Math.floor(pw * 0.45)
   const pcW = Math.floor(pw * 0.30)
+  const pcX = pw - pcW - 5
+
+  const gapMid = 5 + bcW + Math.floor((pcX - (5 + bcW)) / 2)
   
+  // Menu Board (Acts as Education interaction point)
+  drawChalkboard(ctx, gapMid - 17, 18, "MENU", ["Today's Special", "Latte", "Donut"])
+
   // Billing Counter (Left, 45%)
   drawCounter(ctx, 5, bcW)
   drawEspressoMachine(ctx, 15, 46)
@@ -644,7 +719,6 @@ export function renderCafe(
   drawCoffeeGrinder(ctx, 5 + Math.floor(bcW * 0.8), 48)
 
   // Pastry Counter (Right, 30%)
-  const pcX = pw - pcW - 5
   drawFloralPlatform(ctx, pcX, 60, pcW, 22) // Green floral base
   drawPastryCounter(ctx, pcX, 34, pcW)
 
@@ -663,29 +737,26 @@ export function renderCafe(
   // Floor
   drawFloor(ctx, pw, ph, 82)
 
-  // Tables row 1
-  for (let i = 0; i < 4; i++) {
-    const tx = 15 + i * Math.floor((pw - 35) / 4)
-    drawTable(ctx, tx, 88)
-    drawChair(ctx, tx - 3, 90, "right")
-    drawChair(ctx, tx + 14, 90, "left")
-  }
+  // Scattered Aesthetic Tables (8 tables)
+  const tablePositions = [
+    // Top staggered row
+    { x: Math.floor(pw * 0.15), y: 92 },
+    { x: Math.floor(pw * 0.5) - 7, y: 90 },
+    { x: Math.floor(pw * 0.85) - 14, y: 92 },
+    // Middle staggered row
+    { x: Math.floor(pw * 0.3), y: 108 },
+    { x: Math.floor(pw * 0.7) - 7, y: 108 },
+    // Bottom staggered row
+    { x: Math.floor(pw * 0.1), y: 124 },
+    { x: Math.floor(pw * 0.5) - 7, y: 126 },
+    { x: Math.floor(pw * 0.9) - 14, y: 124 },
+  ]
 
-  // Tables row 2
-  for (let i = 0; i < 3; i++) {
-    const tx = 25 + i * Math.floor((pw - 55) / 3)
-    drawTable(ctx, tx, 103)
-    drawChair(ctx, tx - 3, 105, "right")
-    drawChair(ctx, tx + 14, 105, "left")
-  }
-
-  // Tables row 3
-  for (let i = 0; i < 4; i++) {
-    const tx = 10 + i * Math.floor((pw - 25) / 4)
-    drawTable(ctx, tx, 118)
-    drawChair(ctx, tx - 3, 120, "right")
-    drawChair(ctx, tx + 14, 120, "left")
-  }
+  tablePositions.forEach((pos) => {
+    drawTable(ctx, pos.x, pos.y)
+    drawChair(ctx, pos.x - 4, pos.y + 2, "right")
+    drawChair(ctx, pos.x + 13, pos.y + 2, "left")
+  })
 
   // Player
   drawPlayer(ctx, playerX, playerY, time)

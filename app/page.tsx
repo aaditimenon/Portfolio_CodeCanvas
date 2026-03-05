@@ -6,7 +6,13 @@ import MobileControls from "@/components/game/mobile-controls"
 import PortfolioPanel from "@/components/game/portfolio-panel"
 import GameCanvas from "@/components/game/game-canvas"
 
-type PanelType = "about" | "projects" | "skills" | "contact" | "resume"
+type PanelType =
+  | "about"
+  | "skills"
+  | "contact"
+  | "resume"
+  | "achievements"
+  | "education"
 
 export default function CafePortfolio() {
   const [showInstructions, setShowInstructions] = useState(true)
@@ -44,7 +50,7 @@ export default function CafePortfolio() {
   }, [activePanel, showInstructions])
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-[#1a0f0a] overflow-hidden">
+    <main className="fixed inset-0 bg-[#1a0f0a] overflow-hidden">
       <div
         className="pointer-events-none fixed inset-0 z-30"
         style={{
@@ -53,58 +59,58 @@ export default function CafePortfolio() {
         }}
       />
 
-      <div className="relative w-full max-w-[1200px] flex flex-col">
+      <GameCanvas onInteract={handleInteract} />
+
+      <div className="relative z-10 w-full h-full pointer-events-none flex flex-col justify-between p-4">
         <GameHUD
           showInstructions={showInstructions}
           onDismissInstructions={handleDismissInstructions}
           discoveredCount={discovered.size}
-          totalCount={5}
+          totalCount={6}
         />
 
-        <div className="px-2 sm:px-4">
-          <GameCanvas onInteract={handleInteract} />
-        </div>
-
-        <div className="flex justify-center mt-4 px-4">
-          <MobileControls />
-        </div>
-
-        <div className="flex items-center justify-between px-4 py-3 mt-2">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="flex gap-0.5">
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
-                  W
-                </kbd>
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
-                  A
-                </kbd>
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
-                  S
-                </kbd>
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
-                  D
-                </kbd>
-              </div>
-              <span className="text-[10px] text-[#8b6e50] hidden sm:inline">
-                Move
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#c87941]">
-                E
-              </kbd>
-              <span className="text-[10px] text-[#8b6e50] hidden sm:inline">
-                Interact
-              </span>
-            </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-center pointer-events-auto">
+            <MobileControls />
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-[#6b4226] hidden sm:inline">
-              Built with Next.js + Canvas
-            </span>
-            <span className="text-[10px] text-[#4a2e1c]">{"///"}</span>
-            <span className="text-[10px] text-[#6b4226]">2026</span>
+
+          <div className="flex items-center justify-between pointer-events-auto bg-[#1a0f0a]/60 backdrop-blur-sm p-3 rounded-lg border border-[#4a2e1c]/50">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-0.5">
+                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
+                    W
+                  </kbd>
+                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
+                    A
+                  </kbd>
+                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
+                    S
+                  </kbd>
+                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#a68b6b]">
+                    D
+                  </kbd>
+                </div>
+                <span className="text-[10px] text-[#8b6e50] hidden sm:inline">
+                  Move
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-0.5 text-[10px] font-mono rounded bg-[#2a1a10] border border-[#4a2e1c] text-[#c87941]">
+                  E
+                </kbd>
+                <span className="text-[10px] text-[#8b6e50] hidden sm:inline">
+                  Interact
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-[#6b4226] hidden sm:inline">
+                Built with Next.js + Canvas
+              </span>
+              <span className="text-[10px] text-[#4a2e1c]">{"///"}</span>
+              <span className="text-[10px] text-[#6b4226]">2026</span>
+            </div>
           </div>
         </div>
       </div>

@@ -11,16 +11,24 @@ import {
   Palette,
   Zap,
   Trophy,
+  GraduationCap,
 } from "lucide-react"
 
 interface PortfolioPanelProps {
-  type: "about" | "projects" | "skills" | "contact" | "resume" | "achievements"
+  type:
+    | "about"
+    | "projects"
+    | "skills"
+    | "contact"
+    | "resume"
+    | "achievements"
+    | "education"
   onClose: () => void
 }
 
 const panelContent = {
   about: {
-    title: "About Me",
+    title: "Welcome",
     subtitle: "Welcome to my cafe!",
     content: (
       <div className="flex flex-col gap-4">
@@ -207,49 +215,16 @@ const panelContent = {
     ),
   },
   resume: {
-    title: "Resume",
+    title: "About Me",
     subtitle: "The Barista speaks...",
     content: (
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-3 p-3 rounded-lg border border-[#4a2e1c] bg-[#2a1a10]/60">
-          <FileText className="w-5 h-5 text-[#c87941]" />
-          <div>
-            <p className="text-sm text-[#d4c0a0] font-medium">
-              Download Resume
-            </p>
-            <p className="text-xs text-[#a68b6b]">
-              PDF format, last updated 2026
-            </p>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 mt-2">
-          <h3 className="text-[#e8a857] font-bold text-xs uppercase tracking-wider">
-            Experience
-          </h3>
-          {[
-            {
-              role: "Senior Developer",
-              company: "TechCafe Inc.",
-              period: "2024 - Present",
-            },
-            {
-              role: "Full-Stack Developer",
-              company: "BrewCode Studio",
-              period: "2022 - 2024",
-            },
-            {
-              role: "Frontend Developer",
-              company: "PixelBean Labs",
-              period: "2020 - 2022",
-            },
-          ].map((exp) => (
-            <div key={exp.role} className="pl-3 border-l-2 border-[#4a2e1c]">
-              <p className="text-sm text-[#d4c0a0] font-medium">{exp.role}</p>
-              <p className="text-xs text-[#a68b6b]">{exp.company}</p>
-              <p className="text-xs text-[#8b6e50]">{exp.period}</p>
-            </div>
-          ))}
-        </div>
+        <p className="text-[#d4c0a0] leading-relaxed">
+          I'm a passionate developer focused on bringing ideas to life through creative coding and data science. My work combines curiosity for machine learning and practical software engineering to build innovative solutions and share knowledge with the tech community.
+        </p>
+        <p className="text-[#d4c0a0] leading-relaxed">
+          Actively contributing to open-source, I enjoy collaborating, exploring data, and continually expanding my skillset. Whether it's researching urban mobility or developing intelligent network solutions, I’m driven by the challenge of solving real-world problems and creating something meaningful.
+        </p>
       </div>
     ),
   },
@@ -286,6 +261,47 @@ const panelContent = {
               <p className="text-[#d4c0a0] text-xs leading-relaxed italic">
                 Awarded the official "SuperContributor" designation for successful open-source pull requests across global repositories; recognized for high-quality code contributions with an official community badge and environmental honors.
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  education: {
+    title: "Education",
+    subtitle: "My Academic Journey",
+    content: (
+      <div className="flex flex-col gap-5">
+        <div className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/60 hover:border-[#c87941] transition-all group">
+          <div className="flex items-start gap-4">
+            <div className="p-2 rounded-lg bg-[#c87941]/10 text-[#c87941]">
+              <GraduationCap className="w-6 h-6" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-[#e8a857] font-bold text-sm leading-tight">
+                Symbiosis Institute of Technology | Nagpur
+              </h3>
+              <p className="text-[#d4c0a0] text-xs leading-relaxed">
+                B.Tech Computer Science and Engineering (2023-27)
+              </p>
+              <p className="text-[#c87941] text-xs font-bold mt-1">GPA: 8.69</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl border border-[#4a2e1c] bg-[#2a1a10]/60 hover:border-[#c87941] transition-all group">
+          <div className="flex items-start gap-4">
+            <div className="p-2 rounded-lg bg-[#c87941]/10 text-[#c87941]">
+              <GraduationCap className="w-6 h-6" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-[#e8a857] font-bold text-sm leading-tight">
+                Indian Institute of Technology, Madras | Chennai
+              </h3>
+              <p className="text-[#d4c0a0] text-xs leading-relaxed">
+                BS Data Science (Foundation)
+              </p>
+              <p className="text-[#c87941] text-xs font-bold mt-1">GPA: 7.25</p>
             </div>
           </div>
         </div>
